@@ -607,7 +607,7 @@ public struct SettingsThemeView: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(Color.white.opacity(0.6))
 
-                        Text("Version 1.0.0 (Build 1)")
+                        Text("Version \(appVersionString) (Build \(appBuildString))")
                             .font(.system(size: 11, weight: .semibold, design: .monospaced))
                             .foregroundStyle(Color.white.opacity(0.4))
                             .padding(.top, 2)
@@ -711,6 +711,14 @@ public struct SettingsThemeView: View {
                 .padding(.top, 4)
             }
         }
+    }
+
+    private var appVersionString: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.1"
+    }
+
+    private var appBuildString: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "2"
     }
 
     private func manifestoPill(icon: String, title: String, subtitle: String, color: Color) -> some View {
