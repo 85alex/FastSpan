@@ -1,0 +1,842 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0109AB7E63B14A10A94760BF /* ProFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B79C0B084214B39AF69AC11 /* ProFeature.swift */; };
+		10E9657B0770425CAF67F237 /* FastingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F52D232E214997B779F31F /* FastingProtocol.swift */; };
+		11D93041AFE845148742BA13 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C1BC0A78E24784B026859E /* ProBadgeView.swift */; };
+		120CAD5089B646EEA4F0590E /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C24BBDB98A49F3A8AAA631 /* LiveActivityManager.swift */; };
+		219FF1906916450F93DA3D20 /* SettingsThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 735BAD1A8009460EBD0CEF94 /* SettingsThemeView.swift */; };
+		239C2BB9F51C450B80994575 /* FastingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F52D232E214997B779F31F /* FastingProtocol.swift */; };
+		267E05CA68BE49409A2DC491 /* WatchSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF24157470E42FC9834BA36 /* WatchSyncService.swift */; };
+		28470E43817C4B43BC1941BD /* ThemeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1284B179FB14487288F86B54 /* ThemeEnvironment.swift */; };
+		2CAC8F05CBC64863A6B9941D /* FastingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4614FF0B3D54D29B94326E9 /* FastingState.swift */; };
+		37837796F6D14C00A6E714C0 /* MainTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D2EF85AE3F41BE96E97F25 /* MainTrackerView.swift */; };
+		384A74D029D540C8B216ED73 /* CSVExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D288F63454D470480670BEF /* CSVExportService.swift */; };
+		3937D5746A11467CAB73715E /* FastShareCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A296BF7D162B46699E3A3385 /* FastShareCardView.swift */; };
+		3C8343362A5D483E8F03F7F5 /* ProFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B79C0B084214B39AF69AC11 /* ProFeature.swift */; };
+		3D9925B1AD6344E8BC656DAB /* CSVExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D288F63454D470480670BEF /* CSVExportService.swift */; };
+		4495A5352ADF4703AFD2115B /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CCF6A7C615F4FB18298538F /* PaywallView.swift */; };
+		47C55EB3E700495FBD17EF62 /* ValleyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0695FD722ED4E489C7DA725 /* ValleyProgressView.swift */; };
+		52504D5AD6794417B7294BC3 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E464F82A278480881B2C83C /* CircularProgressView.swift */; };
+		573829E5778F45F08BD19290 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97C24BBDB98A49F3A8AAA631 /* LiveActivityManager.swift */; };
+		5BEDA90351774472AEC50A8E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824EFA9746314C2DB4926E56 /* NotificationManager.swift */; };
+		5DE94F1A70B84B87A28F4011 /* FastRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D548AFA862D84448A8559355 /* FastRecord.swift */; };
+		5F11138E2D904032964416C3 /* FastingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F8EA04513949E49629F59C /* FastingManager.swift */; };
+		6AAB9E92A43E4824ABFEABA0 /* FastingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88517DD072E45FE8C8F8672 /* FastingApp.swift */; };
+		7BA5C5ADE29A43719AC45796 /* WatchSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF24157470E42FC9834BA36 /* WatchSyncService.swift */; };
+		8006F7892A63467BB2A88B94 /* FastingWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51577BE37B14F39838001DC /* FastingWatchApp.swift */; };
+		809C3FFB06974D40B2F61CB6 /* ThemeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1284B179FB14487288F86B54 /* ThemeEnvironment.swift */; };
+		82C8F1E0694B4E30AE11BA84 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CDE0F94C3342E2A793B70F /* StoreManager.swift */; };
+		85EA17B8D7EA43E490DCFE2E /* ProtocolPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2BB37A4D894B5491D47A84 /* ProtocolPickerView.swift */; };
+		88F91FB16D5A4BAA89968653 /* FastRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D548AFA862D84448A8559355 /* FastRecord.swift */; };
+		8FE9FA2C38704228865FB1A4 /* FastingActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E086588D93E54276BF832DE4 /* FastingActivityAttributes.swift */; };
+		92BDD21C142E4D0E8A663AF6 /* FastingActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E086588D93E54276BF832DE4 /* FastingActivityAttributes.swift */; };
+		93D5B1CBCEC14BA48CB0BC36 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBAD5124AC549698029F68A /* AppTheme.swift */; };
+		95BE48AC87F34D07B0754863 /* ProtocolPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2BB37A4D894B5491D47A84 /* ProtocolPickerView.swift */; };
+		966AF6063AE1480885338A60 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBAD5124AC549698029F68A /* AppTheme.swift */; };
+		974345D6346C4F6F9FE8728F /* MetricPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AA81812F0B466D896BDAAC /* MetricPillView.swift */; };
+		9A687B67580C4921AAD8C2BF /* WatchProtocolPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD83288AAA494A98A32ADF50 /* WatchProtocolPicker.swift */; };
+		A5BFE8E8F9E049A5B8278C65 /* ProBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C1BC0A78E24784B026859E /* ProBadgeView.swift */; };
+		AA1000020000000000000001 /* FastSpanWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000010000000000000001 /* FastSpanWidgetBundle.swift */; };
+		AA1000020000000000000002 /* FastingLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE82CCFDCD674ACCBC3A46DD /* FastingLiveActivity.swift */; };
+		AA1000020000000000000003 /* FastingActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E086588D93E54276BF832DE4 /* FastingActivityAttributes.swift */; };
+		AA1000020000000000000004 /* FastSpanWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA1000010000000000000003 /* FastSpanWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA3000010000000000000001 /* FastSpanWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = EB47E8A0739542398CF27F52 /* FastSpanWatch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA4000020000000000000001 /* SharedFastingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000001 /* SharedFastingStore.swift */; };
+		AA4000020000000000000002 /* SharedFastingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000001 /* SharedFastingStore.swift */; };
+		AA4000020000000000000003 /* SharedFastingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000001 /* SharedFastingStore.swift */; };
+		AA4000020000000000000004 /* FastSpanWatchWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000002 /* FastSpanWatchWidgetBundle.swift */; };
+		AA4000020000000000000005 /* FastingComplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC21854C6D843CCAA654F45 /* FastingComplications.swift */; };
+		AA4000020000000000000006 /* FastSpanWatchWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000003 /* FastSpanWatchWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AF9825B7DB2546A9B691F0AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3277374EC27F488BB3F1900E /* Assets.xcassets */; };
+		B041B76B950A432ABE75EA42 /* WatchTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4B72965450416B92724DC0 /* WatchTrackerView.swift */; };
+		B22D20FC064B4B538D337016 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CDE0F94C3342E2A793B70F /* StoreManager.swift */; };
+		DA95CC12D77941C5A0D2F15D /* FastDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6B05A0764649EBACAA7208 /* FastDetailSheet.swift */; };
+		DD7A1D8F84144EB19B297103 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824EFA9746314C2DB4926E56 /* NotificationManager.swift */; };
+		E05D07CEE2104D5F8AD1F070 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33416A16FA5B422A952A741B /* Assets.xcassets */; };
+		E061D8CD4428458A86091EF5 /* ValleyProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0695FD722ED4E489C7DA725 /* ValleyProgressView.swift */; };
+		E7F632FA53B5416880C5873E /* ShareSheetModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CC5BF86C304B7EBBF0D258 /* ShareSheetModal.swift */; };
+		E95C20BC89DA46439A001966 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E464F82A278480881B2C83C /* CircularProgressView.swift */; };
+		F379E49A13C8434F9637E6F6 /* FastingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4614FF0B3D54D29B94326E9 /* FastingState.swift */; };
+		F9693FDF18D048D8ABB80661 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7C3DD4B3954978B419B7E0 /* HistoryView.swift */; };
+		FE3308D0A3BC434ABA4B9224 /* FastingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F8EA04513949E49629F59C /* FastingManager.swift */; };
+		FFC78677AF1344B4804A8123 /* MetricPillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AA81812F0B466D896BDAAC /* MetricPillView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA1000060000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F312CDBED2FE45B695A71C6F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA1000040000000000000001;
+			remoteInfo = FastSpanWidgets;
+		};
+		AA3000020000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F312CDBED2FE45B695A71C6F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7B7843E62B34342B7709F7F;
+			remoteInfo = FastSpanWatch;
+		};
+		AA4000060000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F312CDBED2FE45B695A71C6F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA4000040000000000000001;
+			remoteInfo = FastSpanWatchWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA1000030000000000000003 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA1000020000000000000004 /* FastSpanWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA3000030000000000000001 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				AA3000010000000000000001 /* FastSpanWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA4000030000000000000003 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA4000020000000000000006 /* FastSpanWatchWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0E6B05A0764649EBACAA7208 /* FastDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastDetailSheet.swift; path = FastingApp/FastingApp_iOS/Views/FastDetailSheet.swift; sourceTree = SOURCE_ROOT; };
+		1284B179FB14487288F86B54 /* ThemeEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThemeEnvironment.swift; path = FastingApp/Shared/UI/Themes/ThemeEnvironment.swift; sourceTree = SOURCE_ROOT; };
+		3277374EC27F488BB3F1900E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = FastingApp/FastingApp_iOS/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		33416A16FA5B422A952A741B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = FastingApp/FastingApp_Watch/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		4BBAD5124AC549698029F68A /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppTheme.swift; path = FastingApp/Shared/Models/AppTheme.swift; sourceTree = SOURCE_ROOT; };
+		67D2EF85AE3F41BE96E97F25 /* MainTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainTrackerView.swift; path = FastingApp/FastingApp_iOS/Views/MainTrackerView.swift; sourceTree = SOURCE_ROOT; };
+		68C1BC0A78E24784B026859E /* ProBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProBadgeView.swift; path = FastingApp/Shared/UI/Components/ProBadgeView.swift; sourceTree = SOURCE_ROOT; };
+		6DF24157470E42FC9834BA36 /* WatchSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchSyncService.swift; path = FastingApp/Shared/Services/WatchSyncService.swift; sourceTree = SOURCE_ROOT; };
+		6E2BB37A4D894B5491D47A84 /* ProtocolPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProtocolPickerView.swift; path = FastingApp/Shared/UI/Components/ProtocolPickerView.swift; sourceTree = SOURCE_ROOT; };
+		72F52D232E214997B779F31F /* FastingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingProtocol.swift; path = FastingApp/Shared/Models/FastingProtocol.swift; sourceTree = SOURCE_ROOT; };
+		735BAD1A8009460EBD0CEF94 /* SettingsThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsThemeView.swift; path = FastingApp/FastingApp_iOS/Views/SettingsThemeView.swift; sourceTree = SOURCE_ROOT; };
+		73CC5BF86C304B7EBBF0D258 /* ShareSheetModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShareSheetModal.swift; path = FastingApp/FastingApp_iOS/Views/Share/ShareSheetModal.swift; sourceTree = SOURCE_ROOT; };
+		7D288F63454D470480670BEF /* CSVExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CSVExportService.swift; path = FastingApp/Shared/Services/CSVExportService.swift; sourceTree = SOURCE_ROOT; };
+		824EFA9746314C2DB4926E56 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotificationManager.swift; path = FastingApp/Shared/Services/NotificationManager.swift; sourceTree = SOURCE_ROOT; };
+		8B79C0B084214B39AF69AC11 /* ProFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProFeature.swift; path = FastingApp/Shared/Store/ProFeature.swift; sourceTree = SOURCE_ROOT; };
+		91F8EA04513949E49629F59C /* FastingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingManager.swift; path = FastingApp/Shared/Services/FastingManager.swift; sourceTree = SOURCE_ROOT; };
+		95CDE0F94C3342E2A793B70F /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StoreManager.swift; path = FastingApp/Shared/Store/StoreManager.swift; sourceTree = SOURCE_ROOT; };
+		97C24BBDB98A49F3A8AAA631 /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LiveActivityManager.swift; path = FastingApp/Shared/Services/LiveActivityManager.swift; sourceTree = SOURCE_ROOT; };
+		9CCF6A7C615F4FB18298538F /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PaywallView.swift; path = FastingApp/FastingApp_iOS/Views/PaywallView.swift; sourceTree = SOURCE_ROOT; };
+		9E464F82A278480881B2C83C /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CircularProgressView.swift; path = FastingApp/Shared/UI/Components/CircularProgressView.swift; sourceTree = SOURCE_ROOT; };
+		A296BF7D162B46699E3A3385 /* FastShareCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastShareCardView.swift; path = FastingApp/FastingApp_iOS/Views/Share/FastShareCardView.swift; sourceTree = SOURCE_ROOT; };
+		AA1000010000000000000001 /* FastSpanWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastSpanWidgetBundle.swift; path = FastingApp/FastingApp_Widgets/FastSpanWidgetBundle.swift; sourceTree = SOURCE_ROOT; };
+		AA1000010000000000000003 /* FastSpanWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FastSpanWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA2000010000000000000001 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; name = Products.storekit; path = FastingApp/Configuration/Products.storekit; sourceTree = SOURCE_ROOT; };
+		AA4000010000000000000001 /* SharedFastingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedFastingStore.swift; path = FastingApp/Shared/Services/SharedFastingStore.swift; sourceTree = SOURCE_ROOT; };
+		AA4000010000000000000002 /* FastSpanWatchWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastSpanWatchWidgetBundle.swift; path = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgetBundle.swift; sourceTree = SOURCE_ROOT; };
+		AA4000010000000000000003 /* FastSpanWatchWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FastSpanWatchWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA4000010000000000000004 /* FastSpanWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FastSpanWatch.entitlements; path = FastingApp/FastingApp_Watch/FastSpanWatch.entitlements; sourceTree = SOURCE_ROOT; };
+		AA4000010000000000000005 /* FastSpanWatchWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FastSpanWatchWidgets.entitlements; path = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgets.entitlements; sourceTree = SOURCE_ROOT; };
+		B4614FF0B3D54D29B94326E9 /* FastingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingState.swift; path = FastingApp/Shared/Models/FastingState.swift; sourceTree = SOURCE_ROOT; };
+		BD7C3DD4B3954978B419B7E0 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HistoryView.swift; path = FastingApp/FastingApp_iOS/Views/HistoryView.swift; sourceTree = SOURCE_ROOT; };
+		BD83288AAA494A98A32ADF50 /* WatchProtocolPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchProtocolPicker.swift; path = FastingApp/FastingApp_Watch/Views/WatchProtocolPicker.swift; sourceTree = SOURCE_ROOT; };
+		BE82CCFDCD674ACCBC3A46DD /* FastingLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingLiveActivity.swift; path = FastingApp/FastingApp_iOS/LiveActivity/FastingLiveActivity.swift; sourceTree = SOURCE_ROOT; };
+		C88517DD072E45FE8C8F8672 /* FastingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingApp.swift; path = FastingApp/FastingApp_iOS/App/FastingApp.swift; sourceTree = SOURCE_ROOT; };
+		D548AFA862D84448A8559355 /* FastRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastRecord.swift; path = FastingApp/Shared/Models/FastRecord.swift; sourceTree = SOURCE_ROOT; };
+		E0695FD722ED4E489C7DA725 /* ValleyProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ValleyProgressView.swift; path = FastingApp/Shared/UI/Components/ValleyProgressView.swift; sourceTree = SOURCE_ROOT; };
+		E086588D93E54276BF832DE4 /* FastingActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingActivityAttributes.swift; path = FastingApp/Shared/Models/FastingActivityAttributes.swift; sourceTree = SOURCE_ROOT; };
+		E51577BE37B14F39838001DC /* FastingWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingWatchApp.swift; path = FastingApp/FastingApp_Watch/App/FastingWatchApp.swift; sourceTree = SOURCE_ROOT; };
+		EB47E8A0739542398CF27F52 /* FastSpanWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastSpanWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1AA81812F0B466D896BDAAC /* MetricPillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MetricPillView.swift; path = FastingApp/Shared/UI/Components/MetricPillView.swift; sourceTree = SOURCE_ROOT; };
+		FAC21854C6D843CCAA654F45 /* FastingComplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingComplications.swift; path = FastingApp/FastingApp_WatchWidgets/FastingComplications.swift; sourceTree = SOURCE_ROOT; };
+		FB4B72965450416B92724DC0 /* WatchTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchTrackerView.swift; path = FastingApp/FastingApp_Watch/Views/WatchTrackerView.swift; sourceTree = SOURCE_ROOT; };
+		FE45212995EC468997DABA23 /* FastSpan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FastSpan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0E0D65486F8C46168CA5B158 /* FastingApp_iOS */ = {
+			isa = PBXGroup;
+			children = (
+				BE82CCFDCD674ACCBC3A46DD /* FastingLiveActivity.swift */,
+				C88517DD072E45FE8C8F8672 /* FastingApp.swift */,
+				9CCF6A7C615F4FB18298538F /* PaywallView.swift */,
+				735BAD1A8009460EBD0CEF94 /* SettingsThemeView.swift */,
+				0E6B05A0764649EBACAA7208 /* FastDetailSheet.swift */,
+				67D2EF85AE3F41BE96E97F25 /* MainTrackerView.swift */,
+				BD7C3DD4B3954978B419B7E0 /* HistoryView.swift */,
+				73CC5BF86C304B7EBBF0D258 /* ShareSheetModal.swift */,
+				A296BF7D162B46699E3A3385 /* FastShareCardView.swift */,
+				3277374EC27F488BB3F1900E /* Assets.xcassets */,
+			);
+			name = FastingApp_iOS;
+			sourceTree = "<group>";
+		};
+		31FEFCF430B523C7004BD1A9 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				AA1000010000000000000001 /* FastSpanWidgetBundle.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		43C3ED9D86CE43568FBF4091 /* MainGroup */ = {
+			isa = PBXGroup;
+			children = (
+				51F90181F0CB426C92A30BC0 /* FastSpan */,
+				7A7A6E2F67C349E79904EE92 /* Products */,
+				31FEFCF430B523C7004BD1A9 /* Recovered References */,
+			);
+			name = MainGroup;
+			sourceTree = "<group>";
+		};
+		505AD53CB9934F5F8E6F79C7 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				F1AA81812F0B466D896BDAAC /* MetricPillView.swift */,
+				9E464F82A278480881B2C83C /* CircularProgressView.swift */,
+				6E2BB37A4D894B5491D47A84 /* ProtocolPickerView.swift */,
+				E0695FD722ED4E489C7DA725 /* ValleyProgressView.swift */,
+				68C1BC0A78E24784B026859E /* ProBadgeView.swift */,
+				1284B179FB14487288F86B54 /* ThemeEnvironment.swift */,
+				B4614FF0B3D54D29B94326E9 /* FastingState.swift */,
+				D548AFA862D84448A8559355 /* FastRecord.swift */,
+				E086588D93E54276BF832DE4 /* FastingActivityAttributes.swift */,
+				72F52D232E214997B779F31F /* FastingProtocol.swift */,
+				4BBAD5124AC549698029F68A /* AppTheme.swift */,
+				7D288F63454D470480670BEF /* CSVExportService.swift */,
+				91F8EA04513949E49629F59C /* FastingManager.swift */,
+				824EFA9746314C2DB4926E56 /* NotificationManager.swift */,
+				AA4000010000000000000001 /* SharedFastingStore.swift */,
+				6DF24157470E42FC9834BA36 /* WatchSyncService.swift */,
+				97C24BBDB98A49F3A8AAA631 /* LiveActivityManager.swift */,
+				8B79C0B084214B39AF69AC11 /* ProFeature.swift */,
+				95CDE0F94C3342E2A793B70F /* StoreManager.swift */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		51F90181F0CB426C92A30BC0 /* FastSpan */ = {
+			isa = PBXGroup;
+			children = (
+				505AD53CB9934F5F8E6F79C7 /* Shared */,
+				0E0D65486F8C46168CA5B158 /* FastingApp_iOS */,
+				D6699D32782A41C38F4908EB /* FastingApp_Watch */,
+				AA4000070000000000000001 /* FastingApp_WatchWidgets */,
+				AA2000010000000000000001 /* Products.storekit */,
+			);
+			name = FastSpan;
+			sourceTree = "<group>";
+		};
+		7A7A6E2F67C349E79904EE92 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE45212995EC468997DABA23 /* FastSpan.app */,
+				EB47E8A0739542398CF27F52 /* FastSpanWatch.app */,
+				AA1000010000000000000003 /* FastSpanWidgets.appex */,
+				AA4000010000000000000003 /* FastSpanWatchWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AA4000070000000000000001 /* FastingApp_WatchWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				AA4000010000000000000002 /* FastSpanWatchWidgetBundle.swift */,
+				FAC21854C6D843CCAA654F45 /* FastingComplications.swift */,
+				AA4000010000000000000005 /* FastSpanWatchWidgets.entitlements */,
+			);
+			name = FastingApp_WatchWidgets;
+			sourceTree = "<group>";
+		};
+		D6699D32782A41C38F4908EB /* FastingApp_Watch */ = {
+			isa = PBXGroup;
+			children = (
+				E51577BE37B14F39838001DC /* FastingWatchApp.swift */,
+				FB4B72965450416B92724DC0 /* WatchTrackerView.swift */,
+				BD83288AAA494A98A32ADF50 /* WatchProtocolPicker.swift */,
+				33416A16FA5B422A952A741B /* Assets.xcassets */,
+				AA4000010000000000000004 /* FastSpanWatch.entitlements */,
+			);
+			name = FastingApp_Watch;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0A796DA3299E4AF8B083AB1B /* FastSpan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43A392E5CDE142E28ECA0CFB /* Build configuration list for PBXNativeTarget "FastSpan" */;
+			buildPhases = (
+				9E08A24C3F714DCF8904B01A /* Sources */,
+				343A90EE378841869BEC86FB /* Resources */,
+				AA1000030000000000000003 /* Embed Foundation Extensions */,
+				AA3000030000000000000001 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA1000060000000000000002 /* PBXTargetDependency */,
+				AA3000040000000000000001 /* PBXTargetDependency */,
+			);
+			name = FastSpan;
+			productName = FastSpan;
+			productReference = FE45212995EC468997DABA23 /* FastSpan.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AA1000040000000000000001 /* FastSpanWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA1000050000000000000001 /* Build configuration list for PBXNativeTarget "FastSpanWidgets" */;
+			buildPhases = (
+				AA1000030000000000000001 /* Sources */,
+				AA1000030000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FastSpanWidgets;
+			productName = FastSpanWidgets;
+			productReference = AA1000010000000000000003 /* FastSpanWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		AA4000040000000000000001 /* FastSpanWatchWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA4000050000000000000001 /* Build configuration list for PBXNativeTarget "FastSpanWatchWidgets" */;
+			buildPhases = (
+				AA4000030000000000000001 /* Sources */,
+				AA4000030000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FastSpanWatchWidgets;
+			productName = FastSpanWatchWidgets;
+			productReference = AA4000010000000000000003 /* FastSpanWatchWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		E7B7843E62B34342B7709F7F /* FastSpanWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 647140C12CC94D6FA540CB4B /* Build configuration list for PBXNativeTarget "FastSpanWatch" */;
+			buildPhases = (
+				741F7BC012724CFDBA5EF87C /* Sources */,
+				D3519A56A85C462DBCEE8852 /* Resources */,
+				AA4000030000000000000003 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA4000060000000000000002 /* PBXTargetDependency */,
+			);
+			name = FastSpanWatch;
+			productName = FastSpanWatch;
+			productReference = EB47E8A0739542398CF27F52 /* FastSpanWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F312CDBED2FE45B695A71C6F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					0A796DA3299E4AF8B083AB1B = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					AA1000040000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					AA4000040000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					E7B7843E62B34342B7709F7F = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = CB56DA0ECF414B60B00107DA /* Build configuration list for PBXProject "FastingApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 43C3ED9D86CE43568FBF4091 /* MainGroup */;
+			productRefGroup = 7A7A6E2F67C349E79904EE92 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0A796DA3299E4AF8B083AB1B /* FastSpan */,
+				E7B7843E62B34342B7709F7F /* FastSpanWatch */,
+				AA1000040000000000000001 /* FastSpanWidgets */,
+				AA4000040000000000000001 /* FastSpanWatchWidgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		343A90EE378841869BEC86FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF9825B7DB2546A9B691F0AE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1000030000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA4000030000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3519A56A85C462DBCEE8852 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E05D07CEE2104D5F8AD1F070 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		741F7BC012724CFDBA5EF87C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				974345D6346C4F6F9FE8728F /* MetricPillView.swift in Sources */,
+				E95C20BC89DA46439A001966 /* CircularProgressView.swift in Sources */,
+				85EA17B8D7EA43E490DCFE2E /* ProtocolPickerView.swift in Sources */,
+				E061D8CD4428458A86091EF5 /* ValleyProgressView.swift in Sources */,
+				A5BFE8E8F9E049A5B8278C65 /* ProBadgeView.swift in Sources */,
+				28470E43817C4B43BC1941BD /* ThemeEnvironment.swift in Sources */,
+				F379E49A13C8434F9637E6F6 /* FastingState.swift in Sources */,
+				5DE94F1A70B84B87A28F4011 /* FastRecord.swift in Sources */,
+				8FE9FA2C38704228865FB1A4 /* FastingActivityAttributes.swift in Sources */,
+				239C2BB9F51C450B80994575 /* FastingProtocol.swift in Sources */,
+				93D5B1CBCEC14BA48CB0BC36 /* AppTheme.swift in Sources */,
+				3D9925B1AD6344E8BC656DAB /* CSVExportService.swift in Sources */,
+				5F11138E2D904032964416C3 /* FastingManager.swift in Sources */,
+				5BEDA90351774472AEC50A8E /* NotificationManager.swift in Sources */,
+				AA4000020000000000000002 /* SharedFastingStore.swift in Sources */,
+				267E05CA68BE49409A2DC491 /* WatchSyncService.swift in Sources */,
+				573829E5778F45F08BD19290 /* LiveActivityManager.swift in Sources */,
+				3C8343362A5D483E8F03F7F5 /* ProFeature.swift in Sources */,
+				82C8F1E0694B4E30AE11BA84 /* StoreManager.swift in Sources */,
+				8006F7892A63467BB2A88B94 /* FastingWatchApp.swift in Sources */,
+				B041B76B950A432ABE75EA42 /* WatchTrackerView.swift in Sources */,
+				9A687B67580C4921AAD8C2BF /* WatchProtocolPicker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E08A24C3F714DCF8904B01A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFC78677AF1344B4804A8123 /* MetricPillView.swift in Sources */,
+				52504D5AD6794417B7294BC3 /* CircularProgressView.swift in Sources */,
+				95BE48AC87F34D07B0754863 /* ProtocolPickerView.swift in Sources */,
+				47C55EB3E700495FBD17EF62 /* ValleyProgressView.swift in Sources */,
+				11D93041AFE845148742BA13 /* ProBadgeView.swift in Sources */,
+				809C3FFB06974D40B2F61CB6 /* ThemeEnvironment.swift in Sources */,
+				2CAC8F05CBC64863A6B9941D /* FastingState.swift in Sources */,
+				88F91FB16D5A4BAA89968653 /* FastRecord.swift in Sources */,
+				92BDD21C142E4D0E8A663AF6 /* FastingActivityAttributes.swift in Sources */,
+				10E9657B0770425CAF67F237 /* FastingProtocol.swift in Sources */,
+				966AF6063AE1480885338A60 /* AppTheme.swift in Sources */,
+				384A74D029D540C8B216ED73 /* CSVExportService.swift in Sources */,
+				FE3308D0A3BC434ABA4B9224 /* FastingManager.swift in Sources */,
+				DD7A1D8F84144EB19B297103 /* NotificationManager.swift in Sources */,
+				AA4000020000000000000001 /* SharedFastingStore.swift in Sources */,
+				7BA5C5ADE29A43719AC45796 /* WatchSyncService.swift in Sources */,
+				120CAD5089B646EEA4F0590E /* LiveActivityManager.swift in Sources */,
+				0109AB7E63B14A10A94760BF /* ProFeature.swift in Sources */,
+				B22D20FC064B4B538D337016 /* StoreManager.swift in Sources */,
+				6AAB9E92A43E4824ABFEABA0 /* FastingApp.swift in Sources */,
+				4495A5352ADF4703AFD2115B /* PaywallView.swift in Sources */,
+				219FF1906916450F93DA3D20 /* SettingsThemeView.swift in Sources */,
+				DA95CC12D77941C5A0D2F15D /* FastDetailSheet.swift in Sources */,
+				37837796F6D14C00A6E714C0 /* MainTrackerView.swift in Sources */,
+				F9693FDF18D048D8ABB80661 /* HistoryView.swift in Sources */,
+				E7F632FA53B5416880C5873E /* ShareSheetModal.swift in Sources */,
+				3937D5746A11467CAB73715E /* FastShareCardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA1000030000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA1000020000000000000001 /* FastSpanWidgetBundle.swift in Sources */,
+				AA1000020000000000000002 /* FastingLiveActivity.swift in Sources */,
+				AA1000020000000000000003 /* FastingActivityAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA4000030000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA4000020000000000000003 /* SharedFastingStore.swift in Sources */,
+				AA4000020000000000000004 /* FastSpanWatchWidgetBundle.swift in Sources */,
+				AA4000020000000000000005 /* FastingComplications.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA1000060000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA1000040000000000000001 /* FastSpanWidgets */;
+			targetProxy = AA1000060000000000000001 /* PBXContainerItemProxy */;
+		};
+		AA3000040000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7B7843E62B34342B7709F7F /* FastSpanWatch */;
+			targetProxy = AA3000020000000000000001 /* PBXContainerItemProxy */;
+		};
+		AA4000060000000000000002 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA4000040000000000000001 /* FastSpanWatchWidgets */;
+			targetProxy = AA4000060000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0496E48977EA4B43A9B5864B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		0E344C3253D440AC84C9DB69 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		2D70B54FEAA848758C37F328 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpan;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan;
+				PRODUCT_NAME = FastSpan;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		999875D228414E42ABAA4341 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_Watch/FastSpanWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpan;
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.alexpandelidis.fastspan;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan.watchkitapp;
+				PRODUCT_NAME = FastSpanWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		A9C2F56A122046B398FEBEB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_Watch/FastSpanWatch.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpan;
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.alexpandelidis.fastspan;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan.watchkitapp;
+				PRODUCT_NAME = FastSpanWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		AA1000050000000000000002 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FastingApp/FastingApp_Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpanWidgets;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		AA1000050000000000000003 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FastingApp/FastingApp_Widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpanWidgets;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		AA4000050000000000000002 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FastingApp/FastingApp_WatchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpanWatchWidgets;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan.watchkitapp.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		AA4000050000000000000003 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FastingApp/FastingApp_WatchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpanWatchWidgets;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan.watchkitapp.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		EC2E3759591740B4B26689AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HYU3P8TH43;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = FastSpan;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpandelidis.fastspan;
+				PRODUCT_NAME = FastSpan;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43A392E5CDE142E28ECA0CFB /* Build configuration list for PBXNativeTarget "FastSpan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D70B54FEAA848758C37F328 /* Debug */,
+				EC2E3759591740B4B26689AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		647140C12CC94D6FA540CB4B /* Build configuration list for PBXNativeTarget "FastSpanWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				999875D228414E42ABAA4341 /* Debug */,
+				A9C2F56A122046B398FEBEB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA1000050000000000000001 /* Build configuration list for PBXNativeTarget "FastSpanWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA1000050000000000000002 /* Debug */,
+				AA1000050000000000000003 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA4000050000000000000001 /* Build configuration list for PBXNativeTarget "FastSpanWatchWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA4000050000000000000002 /* Debug */,
+				AA4000050000000000000003 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB56DA0ECF414B60B00107DA /* Build configuration list for PBXProject "FastingApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0496E48977EA4B43A9B5864B /* Debug */,
+				0E344C3253D440AC84C9DB69 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F312CDBED2FE45B695A71C6F /* Project object */;
+}
