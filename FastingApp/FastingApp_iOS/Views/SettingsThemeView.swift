@@ -760,7 +760,7 @@ public struct SettingsThemeView: View {
     }
 
     private var appBuildString: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "3"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "4"
     }
 
     private func manifestoPill(icon: String, title: String, subtitle: String, color: Color) -> some View {
