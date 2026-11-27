@@ -54,6 +54,9 @@
 		AA4000020000000000000004 /* FastSpanWatchWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000002 /* FastSpanWatchWidgetBundle.swift */; };
 		AA4000020000000000000005 /* FastingComplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC21854C6D843CCAA654F45 /* FastingComplications.swift */; };
 		AA4000020000000000000006 /* FastSpanWatchWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA4000010000000000000003 /* FastSpanWatchWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA5000020000000000000001 /* CelestialSkyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000010000000000000001 /* CelestialSkyBackgroundView.swift */; };
+		AA5000020000000000000002 /* CelestialSkyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5000010000000000000001 /* CelestialSkyBackgroundView.swift */; };
+		AA6000020000000000000001 /* LegalDisclaimerViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6000010000000000000001 /* LegalDisclaimerViews.swift */; };
 		AF9825B7DB2546A9B691F0AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3277374EC27F488BB3F1900E /* Assets.xcassets */; };
 		B041B76B950A432ABE75EA42 /* WatchTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB4B72965450416B92724DC0 /* WatchTrackerView.swift */; };
 		B22D20FC064B4B538D337016 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CDE0F94C3342E2A793B70F /* StoreManager.swift */; };
@@ -159,6 +162,8 @@
 		AA4000010000000000000003 /* FastSpanWatchWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FastSpanWatchWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA4000010000000000000004 /* FastSpanWatch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FastSpanWatch.entitlements; path = FastingApp/FastingApp_Watch/FastSpanWatch.entitlements; sourceTree = SOURCE_ROOT; };
 		AA4000010000000000000005 /* FastSpanWatchWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FastSpanWatchWidgets.entitlements; path = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgets.entitlements; sourceTree = SOURCE_ROOT; };
+		AA5000010000000000000001 /* CelestialSkyBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CelestialSkyBackgroundView.swift; path = FastingApp/Shared/UI/Components/CelestialSkyBackgroundView.swift; sourceTree = SOURCE_ROOT; };
+		AA6000010000000000000001 /* LegalDisclaimerViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LegalDisclaimerViews.swift; path = FastingApp/FastingApp_iOS/Views/LegalDisclaimerViews.swift; sourceTree = SOURCE_ROOT; };
 		B4614FF0B3D54D29B94326E9 /* FastingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FastingState.swift; path = FastingApp/Shared/Models/FastingState.swift; sourceTree = SOURCE_ROOT; };
 		BD7C3DD4B3954978B419B7E0 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HistoryView.swift; path = FastingApp/FastingApp_iOS/Views/HistoryView.swift; sourceTree = SOURCE_ROOT; };
 		BD83288AAA494A98A32ADF50 /* WatchProtocolPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchProtocolPicker.swift; path = FastingApp/FastingApp_Watch/Views/WatchProtocolPicker.swift; sourceTree = SOURCE_ROOT; };
@@ -183,6 +188,7 @@
 				C88517DD072E45FE8C8F8672 /* FastingApp.swift */,
 				9CCF6A7C615F4FB18298538F /* PaywallView.swift */,
 				735BAD1A8009460EBD0CEF94 /* SettingsThemeView.swift */,
+				AA6000010000000000000001 /* LegalDisclaimerViews.swift */,
 				0E6B05A0764649EBACAA7208 /* FastDetailSheet.swift */,
 				67D2EF85AE3F41BE96E97F25 /* MainTrackerView.swift */,
 				BD7C3DD4B3954978B419B7E0 /* HistoryView.swift */,
@@ -218,6 +224,7 @@
 				9E464F82A278480881B2C83C /* CircularProgressView.swift */,
 				6E2BB37A4D894B5491D47A84 /* ProtocolPickerView.swift */,
 				E0695FD722ED4E489C7DA725 /* ValleyProgressView.swift */,
+				AA5000010000000000000001 /* CelestialSkyBackgroundView.swift */,
 				68C1BC0A78E24784B026859E /* ProBadgeView.swift */,
 				1284B179FB14487288F86B54 /* ThemeEnvironment.swift */,
 				B4614FF0B3D54D29B94326E9 /* FastingState.swift */,
@@ -442,6 +449,7 @@
 				E95C20BC89DA46439A001966 /* CircularProgressView.swift in Sources */,
 				85EA17B8D7EA43E490DCFE2E /* ProtocolPickerView.swift in Sources */,
 				E061D8CD4428458A86091EF5 /* ValleyProgressView.swift in Sources */,
+				AA5000020000000000000001 /* CelestialSkyBackgroundView.swift in Sources */,
 				A5BFE8E8F9E049A5B8278C65 /* ProBadgeView.swift in Sources */,
 				28470E43817C4B43BC1941BD /* ThemeEnvironment.swift in Sources */,
 				F379E49A13C8434F9637E6F6 /* FastingState.swift in Sources */,
@@ -471,6 +479,7 @@
 				52504D5AD6794417B7294BC3 /* CircularProgressView.swift in Sources */,
 				95BE48AC87F34D07B0754863 /* ProtocolPickerView.swift in Sources */,
 				47C55EB3E700495FBD17EF62 /* ValleyProgressView.swift in Sources */,
+				AA5000020000000000000002 /* CelestialSkyBackgroundView.swift in Sources */,
 				11D93041AFE845148742BA13 /* ProBadgeView.swift in Sources */,
 				809C3FFB06974D40B2F61CB6 /* ThemeEnvironment.swift in Sources */,
 				2CAC8F05CBC64863A6B9941D /* FastingState.swift in Sources */,
@@ -489,6 +498,7 @@
 				6AAB9E92A43E4824ABFEABA0 /* FastingApp.swift in Sources */,
 				4495A5352ADF4703AFD2115B /* PaywallView.swift in Sources */,
 				219FF1906916450F93DA3D20 /* SettingsThemeView.swift in Sources */,
+				AA6000020000000000000001 /* LegalDisclaimerViews.swift in Sources */,
 				DA95CC12D77941C5A0D2F15D /* FastDetailSheet.swift in Sources */,
 				37837796F6D14C00A6E714C0 /* MainTrackerView.swift in Sources */,
 				F9693FDF18D048D8ABB80661 /* HistoryView.swift in Sources */,
@@ -573,7 +583,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -606,7 +616,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_Watch/FastSpanWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -631,7 +641,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_Watch/FastSpanWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -654,7 +664,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FastingApp/FastingApp_Widgets/Info.plist;
@@ -680,7 +690,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FastingApp/FastingApp_Widgets/Info.plist;
@@ -707,7 +717,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FastingApp/FastingApp_WatchWidgets/Info.plist;
@@ -735,7 +745,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = FastingApp/FastingApp_WatchWidgets/FastSpanWatchWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FastingApp/FastingApp_WatchWidgets/Info.plist;
@@ -763,7 +773,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = HYU3P8TH43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

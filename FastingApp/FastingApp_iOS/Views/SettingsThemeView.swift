@@ -15,7 +15,7 @@ public struct SettingsThemeView: View {
     @State private var storeManager = StoreManager.shared
 
     @State private var showPaywall: Bool = false
-    @State private var showPrivacySheet: Bool = false
+    @State private var activeLegalDocument: LegalDocumentType? = nil
     @State private var csvExportItem: ShareableURLPayload? = nil
     @State private var notificationsDenied: Bool = false
 
@@ -48,6 +48,9 @@ public struct SettingsThemeView: View {
                         // Privacy & Data Export Section
                         dataPrivacySection
 
+                        // Health & Medical Disclaimer Section
+                        legalDisclaimerSection
+
                         // VoltSlide-Style About Section
                         aboutVoltSlideSection
 
@@ -65,11 +68,21 @@ public struct SettingsThemeView: View {
             .sheet(item: $csvExportItem) { item in
                 ShareActivityView(activityItems: [item.url])
             }
-            .sheet(isPresented: $showPrivacySheet) {
-                privacyManifestSheet
+            .sheet(item: $activeLegalDocument) { document in
+                switch document {
+                case .medicalDisclaimer:
+                    MedicalDisclaimerSheet()
+                case .privacyPolicy:
+                    PrivacyPolicySheet()
+                case .termsOfUse:
+                    TermsOfUseSheet()
+                }
             }
             .task {
                 notificationsDenied = await NotificationManager.shared.isNotificationsDenied()
+                if storeManager.proProduct == nil {
+                    await storeManager.loadProducts()
+                }
             }
             .onChange(of: scenePhase) { _, newPhase in
                 if newPhase == .active {
@@ -113,8 +126,8 @@ public struct SettingsThemeView: View {
 
                     Spacer()
 
-                    Text(storeManager.localizedPrice)
-                        .font(.system(size: 15, weight: .black, design: .rounded))
+                    Text(storeManager.localizedPrice ?? "Upgrade")
+                        .font(.system(size: storeManager.localizedPrice != nil ? 15 : 13, weight: .black, design: .rounded))
                         .foregroundStyle(Color.black)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 6)
@@ -536,6 +549,87 @@ public struct SettingsThemeView: View {
         }
     }
 
+    // MARK: - Health & Legal Disclaimer Section
+    private var legalDisclaimerSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Health & Legal")
+                .font(.system(size: 17, weight: .bold, design: .rounded))
+                .foregroundStyle(Color.white)
+
+            VStack(spacing: 0) {
+                Button {
+                    activeLegalDocument = .medicalDisclaimer
+                } label: {
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.orange.opacity(0.15))
+                                .frame(width: 36, height: 36)
+                            Image(systemName: "cross.case.fill")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Color.orange)
+                        }
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Health & Medical Disclaimer")
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                .foregroundStyle(Color.white)
+                            Text("Tap to review medical, safety & liability information")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.white.opacity(0.5))
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundStyle(Color.white.opacity(0.3))
+                    }
+                    .padding(14)
+                }
+                .buttonStyle(.plain)
+
+                Divider().background(Color.white.opacity(0.08))
+
+                Button {
+                    activeLegalDocument = .termsOfUse
+                } label: {
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.08))
+                                .frame(width: 36, height: 36)
+                            Image(systemName: "doc.text.fill")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Color.white.opacity(0.8))
+                        }
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Terms of Use")
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                .foregroundStyle(Color.white)
+                            Text("Eligibility, wellness scope & purchase terms")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.white.opacity(0.5))
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundStyle(Color.white.opacity(0.3))
+                    }
+                    .padding(14)
+                }
+                .buttonStyle(.plain)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Color.white.opacity(0.05))
+            )
+        }
+    }
+
     // MARK: - VoltSlide-Style About Section
     private var aboutVoltSlideSection: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -545,73 +639,20 @@ public struct SettingsThemeView: View {
 
             VStack(spacing: 16) {
                 // Hero Brand Card
-                VStack(spacing: 12) {
-                    ZStack {
-                        // Ambient Halo
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    colors: [
-                                        fastingManager.selectedTheme.primaryColor.opacity(0.4),
-                                        Color.clear
-                                    ],
-                                    center: .center,
-                                    startRadius: 10,
-                                    endRadius: 45
-                                )
-                            )
-                            .frame(width: 80, height: 80)
+                VStack(spacing: 4) {
+                    Text("FASTSPAN")
+                        .font(.system(size: 20, weight: .black, design: .rounded))
+                        .tracking(2.5)
+                        .foregroundStyle(Color.white)
 
-                        // FastSpan Dipped Horizon Line Badge
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .fill(Color.black.opacity(0.3))
-                                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Color.white.opacity(0.12), lineWidth: 1))
-                                .frame(width: 60, height: 60)
+                    Text("Minimalist • Privacy-Focused Tracker")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(Color.white.opacity(0.6))
 
-                            Path { path in
-                                path.move(to: CGPoint(x: 10, y: 28))
-                                path.addLine(to: CGPoint(x: 22, y: 28))
-                                path.addCurve(
-                                    to: CGPoint(x: 30, y: 38),
-                                    control1: CGPoint(x: 25, y: 28),
-                                    control2: CGPoint(x: 27, y: 38)
-                                )
-                                path.addCurve(
-                                    to: CGPoint(x: 38, y: 28),
-                                    control1: CGPoint(x: 33, y: 38),
-                                    control2: CGPoint(x: 35, y: 28)
-                                )
-                                path.addLine(to: CGPoint(x: 50, y: 28))
-                            }
-                            .stroke(
-                                Color.white,
-                                style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round)
-                            )
-
-                            Circle()
-                                .fill(Color(red: 1.0, green: 0.75, blue: 0.2))
-                                .frame(width: 8, height: 8)
-                                .position(x: 30, y: 38)
-                        }
-                    }
-                    .padding(.top, 6)
-
-                    VStack(spacing: 4) {
-                        Text("FASTSPAN")
-                            .font(.system(size: 20, weight: .black, design: .rounded))
-                            .tracking(2.5)
-                            .foregroundStyle(Color.white)
-
-                        Text("Minimalist • Privacy-Focused Tracker")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(Color.white.opacity(0.6))
-
-                        Text("Version \(appVersionString) (Build \(appBuildString))")
-                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                            .foregroundStyle(Color.white.opacity(0.4))
-                            .padding(.top, 2)
-                    }
+                    Text("Version \(appVersionString) (Build \(appBuildString))")
+                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(Color.white.opacity(0.4))
+                        .padding(.top, 2)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
@@ -643,7 +684,8 @@ public struct SettingsThemeView: View {
                     manifestoPill(
                         icon: "sparkles",
                         title: "Honest Software",
-                        subtitle: "One-time $5 CAD lifetime purchase. Zero subscriptions",
+                        subtitle: storeManager.localizedPrice.map { "One-time \($0) lifetime purchase. Zero subscriptions" }
+                            ?? "One-time lifetime purchase. Zero subscriptions",
                         color: Color(red: 1.00, green: 0.68, blue: 0.18)
                     )
                 }
@@ -683,11 +725,11 @@ public struct SettingsThemeView: View {
                     Divider().background(Color.white.opacity(0.08))
 
                     Button {
-                        showPrivacySheet = true
+                        activeLegalDocument = .privacyPolicy
                     } label: {
                         aboutActionRow(
                             icon: "hand.raised.fill",
-                            title: "Privacy Manifesto",
+                            title: "Privacy Policy",
                             subtitle: "Read our zero-data collection guarantee"
                         )
                     }
@@ -718,7 +760,7 @@ public struct SettingsThemeView: View {
     }
 
     private var appBuildString: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "2"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "3"
     }
 
     private func manifestoPill(icon: String, title: String, subtitle: String, color: Color) -> some View {
@@ -777,75 +819,5 @@ public struct SettingsThemeView: View {
                 .foregroundStyle(Color.white.opacity(0.3))
         }
         .padding(12)
-    }
-
-    // MARK: - Privacy Manifesto Modal
-    private var privacyManifestSheet: some View {
-        NavigationStack {
-            ZStack {
-                Color(red: 0.08, green: 0.08, blue: 0.10)
-                    .ignoresSafeArea()
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 18) {
-                        Text("Privacy by Design")
-                            .font(.system(size: 24, weight: .black, design: .rounded))
-                            .foregroundStyle(Color.white)
-
-                        Text("We believe health and wellness data is deeply personal. FastSpan was architected from the first line of code with strict privacy principles:")
-                            .font(.system(size: 14))
-                            .foregroundStyle(Color.white.opacity(0.7))
-
-                        VStack(alignment: .leading, spacing: 12) {
-                            privacyBullet(
-                                title: "Zero Third-Party SDKs",
-                                desc: "No Facebook, Google, Amplitude, Mixpanel, or advertising trackers are installed."
-                            )
-                            privacyBullet(
-                                title: "100% Local Notifications",
-                                desc: "Your fasting schedule and reminders never touch an external push notification server."
-                            )
-                            privacyBullet(
-                                title: "Private Apple iCloud Sync",
-                                desc: "Sync between your iPhone and Apple Watch uses your own end-to-end encrypted iCloud database."
-                            )
-                            privacyBullet(
-                                title: "Direct Data Ownership",
-                                desc: "Export your entire fasting history to CSV anytime. No vendor lock-in."
-                            )
-                        }
-
-                        Spacer(minLength: 20)
-                    }
-                    .padding(20)
-                }
-            }
-            .navigationTitle("Privacy Manifesto")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { showPrivacySheet = false }
-                        .bold()
-                        .foregroundStyle(Color.orange)
-                }
-            }
-        }
-    }
-
-    private func privacyBullet(title: String, desc: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.system(size: 15, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.white)
-            Text(desc)
-                .font(.system(size: 13))
-                .foregroundStyle(Color.white.opacity(0.65))
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.white.opacity(0.05))
-        )
     }
 }

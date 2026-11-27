@@ -15,6 +15,11 @@ struct FastingEngineTests {
         #expect(custom.fastingHours == 17.5)
         #expect(custom.isCustom == true)
         #expect(custom.formattedRatio == "17h 30m")
+
+        let clampedCustom = FastingProtocol.custom(hours: 36.0)
+        #expect(clampedCustom.fastingHours == 20.0)
+        #expect(FastingProtocol.allPresets.count == 6)
+        #expect(FastingProtocol.allPresets.allSatisfy { $0.fastingHours <= 20.0 && $0.name == $0.formattedRatio })
     }
 
     @Test func testSnapshotCalculation_ActiveFast() {

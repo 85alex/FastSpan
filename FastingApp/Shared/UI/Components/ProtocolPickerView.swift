@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Modal selector for preset fasting protocols and custom durations (1h–168h).
+/// Modal selector for preset fasting protocols and custom durations (1h–20h).
 public struct ProtocolPickerView: View {
     @Environment(\.dismiss) private var dismiss
     public let currentProtocol: FastingProtocol
@@ -14,7 +14,11 @@ public struct ProtocolPickerView: View {
     ) {
         self.currentProtocol = currentProtocol
         self.onSelect = onSelect
-        _customHours = State(initialValue: currentProtocol.fastingHours)
+        let clampedHours = min(
+            FastingProtocol.maxFastingHours,
+            max(FastingProtocol.minFastingHours, currentProtocol.fastingHours)
+        )
+        _customHours = State(initialValue: clampedHours)
     }
 
     public var body: some View {
@@ -65,19 +69,15 @@ public struct ProtocolPickerView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(proto.name)
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.white)
+                    Text(proto.formattedRatio)
+                        .font(.system(size: 18, weight: .black, design: .rounded))
+                        .foregroundStyle(isSelected ? Color.orange : Color.white)
                     Text(proto.subtitle)
                         .font(.system(size: 12))
                         .foregroundStyle(Color.white.opacity(0.6))
                 }
 
                 Spacer()
-
-                Text(proto.formattedRatio)
-                    .font(.system(size: 15, weight: .black, design: .rounded))
-                    .foregroundStyle(isSelected ? Color.orange : Color.white.opacity(0.8))
 
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
@@ -110,7 +110,11 @@ public struct ProtocolPickerView: View {
                     .foregroundStyle(Color.orange)
             }
 
-            Slider(value: $customHours, in: 1...168, step: 0.5)
+            Slider(
+                value: $customHours,
+                in: FastingProtocol.minFastingHours...FastingProtocol.maxFastingHours,
+                step: 0.5
+            )
                 .tint(Color.orange)
 
             Button {

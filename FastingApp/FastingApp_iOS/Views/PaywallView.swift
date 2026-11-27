@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Elegant paywall presenting the $5 CAD one-time lifetime Pro upgrade.
+/// Elegant paywall presenting the one-time lifetime Pro upgrade using live StoreKit pricing.
 public struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var storeManager = StoreManager.shared
@@ -102,9 +102,14 @@ public struct PaywallView: View {
                                         .foregroundStyle(Color.white.opacity(0.6))
                                 }
                                 Spacer()
-                                Text(storeManager.localizedPrice)
-                                    .font(.system(size: 24, weight: .black, design: .rounded))
-                                    .foregroundStyle(Color.orange)
+                                if let price = storeManager.localizedPrice {
+                                    Text(price)
+                                        .font(.system(size: 24, weight: .black, design: .rounded))
+                                        .foregroundStyle(Color.orange)
+                                } else {
+                                    ProgressView()
+                                        .tint(Color.orange)
+                                }
                             }
                             .padding(18)
                             .background(
@@ -142,7 +147,7 @@ public struct PaywallView: View {
                                     } else {
                                         Image(systemName: "lock.open.fill")
                                             .font(.system(size: 16, weight: .bold))
-                                        Text("Unlock Pro • \(storeManager.localizedPrice)")
+                                        Text(storeManager.localizedPrice.map { "Unlock Pro • \($0)" } ?? "Unlock Pro")
                                             .font(.system(size: 17, weight: .bold, design: .rounded))
                                     }
                                 }

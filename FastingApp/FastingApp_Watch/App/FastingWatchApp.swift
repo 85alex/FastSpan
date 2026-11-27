@@ -17,7 +17,6 @@ struct FastSpanWatchApp: App {
         self.modelContainer = container
         FastingManager.shared.isCloudKitActive = isCloudKitActive
         FastingManager.shared.onRemoteFastCompleted = { record in
-            guard !FastingManager.shared.isCloudKitActive else { return }
             let recordID = record.id
             let descriptor = FetchDescriptor<FastRecord>(predicate: #Predicate { $0.id == recordID })
             let existingCount = (try? container.mainContext.fetchCount(descriptor)) ?? 0

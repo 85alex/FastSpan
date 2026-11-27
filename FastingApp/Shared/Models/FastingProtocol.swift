@@ -51,89 +51,74 @@ public struct FastingProtocol: Identifiable, Codable, Hashable, Sendable {
         self.isCustom = isCustom
     }
 
-    // MARK: - Presets (8 total)
+    public static let minFastingHours: Double = 1.0
+    public static let maxFastingHours: Double = 20.0
+
+    // MARK: - Presets (6 total, max 20h)
 
     public static let standard16_8 = FastingProtocol(
         id: "16_8",
-        name: "16:8 LeanGains",
-        subtitle: "Gold standard daily fast",
+        name: "16:8",
+        subtitle: "16h fast • 8h eating",
         fastingHours: 16.0,
         iconName: "flame.fill"
     )
 
     public static let moderate18_6 = FastingProtocol(
         id: "18_6",
-        name: "18:6 Moderate",
-        subtitle: "Extended fat-burning window",
+        name: "18:6",
+        subtitle: "18h fast • 6h eating",
         fastingHours: 18.0,
         iconName: "bolt.fill"
     )
 
     public static let warrior20_4 = FastingProtocol(
         id: "20_4",
-        name: "20:4 Warrior Diet",
-        subtitle: "Deep metabolic reset",
+        name: "20:4",
+        subtitle: "20h fast • 4h eating",
         fastingHours: 20.0,
         iconName: "shield.fill"
     )
 
-    public static let omad23_1 = FastingProtocol(
-        id: "23_1",
-        name: "23:1 OMAD",
-        subtitle: "One Meal A Day",
-        fastingHours: 23.0,
-        iconName: "star.fill"
-    )
-
     public static let gentle14_10 = FastingProtocol(
         id: "14_10",
-        name: "14:10 Gentle",
-        subtitle: "Easy sustainable start",
+        name: "14:10",
+        subtitle: "14h fast • 10h eating",
         fastingHours: 14.0,
         iconName: "leaf.fill"
     )
 
     public static let circadian13_11 = FastingProtocol(
         id: "13_11",
-        name: "13:11 Circadian",
-        subtitle: "Overnight digestive rest",
+        name: "13:11",
+        subtitle: "13h fast • 11h eating",
         fastingHours: 13.0,
         iconName: "moon.stars.fill"
     )
 
     public static let circadian12_12 = FastingProtocol(
         id: "12_12",
-        name: "12:12 Circadian Rhythm",
-        subtitle: "Balanced 12-hour rhythm",
+        name: "12:12",
+        subtitle: "12h fast • 12h eating",
         fastingHours: 12.0,
         iconName: "sun.horizon.fill"
-    )
-
-    public static let monk36 = FastingProtocol(
-        id: "36h",
-        name: "36h Monk Fast",
-        subtitle: "Full-day cellular renewal",
-        fastingHours: 36.0,
-        iconName: "sparkles"
     )
 
     public static let allPresets: [FastingProtocol] = [
         .standard16_8,
         .moderate18_6,
         .warrior20_4,
-        .omad23_1,
         .gentle14_10,
         .circadian13_11,
-        .circadian12_12,
-        .monk36
+        .circadian12_12
     ]
 
     public static func custom(hours: Double) -> FastingProtocol {
-        let clamped = min(168.0, max(1.0, hours))
+        let clamped = min(maxFastingHours, max(minFastingHours, hours))
         let totalMinutes = Int((clamped * 60.0).rounded())
         let h = totalMinutes / 60
         let m = totalMinutes % 60
-        let label = m == 0 ? "\(h)h Custom" : "\(h)h \(m)m Custom"
+        let label = m == 0 ? "\(h)h" : "\(h)h \(m)m"
         return FastingProtocol(
             id: "custom_\(totalMinutes)",
             name: label,

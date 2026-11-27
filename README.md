@@ -1,6 +1,6 @@
 # ⏱️ FastSpan • Privacy-Focused Intermittent Fasting for iOS & watchOS
 
-> A minimalist, privacy-first intermittent fasting tracker built natively with SwiftUI for iOS and Apple Watch. Features circular progress rings, flexible fasting schedules, 3-stage local notifications, an ActivityKit Dynamic Island milestone tracker, StoreKit 2 Pro monetization ($5 CAD one-time purchase), VoltSlide-style share cards, and RFC 4180 CSV export with private iCloud sync.
+> A minimalist, privacy-first intermittent fasting tracker built natively with SwiftUI for iOS and Apple Watch. Features circular progress rings, flexible fasting schedules, 3-stage local notifications, an ActivityKit Dynamic Island milestone tracker, StoreKit 2 Pro monetization (one-time lifetime purchase), VoltSlide-style share cards, and RFC 4180 CSV export with private iCloud sync.
 
 ---
 
@@ -9,14 +9,13 @@
 - **🔒 100% Privacy-First**: Zero third-party trackers, zero advertising SDKs, zero remote analytics. All data stays strictly on your device and inside your private Apple iCloud database.
 - **⭕ Circular Visual Progress**: Vector progress indicator with gradient strokes, overtime halos, and real-time live countdowns.
 - **⚡ Flexible Protocols & Custom Durations**:
-  - `16:8 LeanGains` (Gold standard)
-  - `18:6 Moderate`
-  - `20:4 Warrior Diet`
-  - `23:1 OMAD` (One Meal A Day)
-  - `14:10 Gentle`
-  - `12:12 Circadian Rhythm`
-  - `36h Monk Fast`
-  - Fully customizable fasting durations (1h–168h) & retroactive start time editing.
+  - `16:8`
+  - `18:6`
+  - `20:4`
+  - `14:10`
+  - `13:11`
+  - `12:12`
+  - Fully customizable fasting durations (1h–20h) & retroactive start time editing.
 - **🔔 Tri-Stage Local Notifications**:
   1. **1 Hour Before Goal**: Friendly heads-up as you enter the final stretch.
   2. **Target Reached**: Celebration alert when hitting 100%.
@@ -34,7 +33,7 @@
 - **📸 VoltSlide-Style Share Cards**: Dynamic graphical cards generated via `ImageRenderer` in Story (9:16) and Square (1:1) formats.
 - **📊 Fasting History, Stats & CSV Export**: Streak tracking, weekly visual charts, 7-day free history / Pro unlimited lifetime logs, and RFC 4180 CSV export.
 - **💎 StoreKit 2 Pro Monetization**:
-  - **$5.00 CAD One-Time Purchase** (`com.antigravity.fastspan.pro.lifetime`).
+  - **One-Time Lifetime Purchase** (`com.antigravity.fastspan.pro.lifetime`, priced dynamically via StoreKit).
   - Pay once, own forever — no subscription fatigue, Family Sharing enabled.
 
 ---
@@ -76,7 +75,7 @@
 │   │   │   ├── FastDetailSheet.swift         # Start/Edit/Complete sheet
 │   │   │   ├── HistoryView.swift             # History, stats & CSV export
 │   │   │   ├── SettingsThemeView.swift       # Theme switcher & toggles
-│   │   │   ├── PaywallView.swift             # $5 CAD FastSpan Pro modal
+│   │   │   ├── PaywallView.swift             # FastSpan Pro modal
 │   │   │   └── Share/
 │   │   │       ├── FastShareCardView.swift   # FastSpan share card template
 │   │   │       └── ShareSheetModal.swift     # ImageRenderer share sheet

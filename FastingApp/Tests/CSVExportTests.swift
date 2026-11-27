@@ -15,7 +15,7 @@ struct CSVExportTests {
             startTime: start,
             endTime: end,
             targetDurationHours: 16.0,
-            protocolName: "16:8 LeanGains",
+            protocolName: "16:8",
             isCompleted: true,
             notes: "Felt great, had black coffee",
             mood: "⚡ Energized"
@@ -26,7 +26,7 @@ struct CSVExportTests {
             startTime: start,
             endTime: end,
             targetDurationHours: 18.0,
-            protocolName: "18:6 Moderate",
+            protocolName: "18:6",
             isCompleted: true,
             notes: "Note with, comma and \"quotes\"",
             mood: "🧘 Calm"
@@ -39,7 +39,7 @@ struct CSVExportTests {
 
         // Verify record 1 contents
         #expect(csvString.contains("11111111-2222-3333-4444-555555555555"))
-        #expect(csvString.contains("16:8 LeanGains"))
+        #expect(csvString.contains("16:8"))
         #expect(csvString.contains("\"Felt great, had black coffee\""))
         #expect(csvString.contains("⚡ Energized"))
 

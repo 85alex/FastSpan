@@ -35,6 +35,7 @@ public final class FastingManager {
     public var notifyTargetReached: Bool = true
     public var notifyOneHourPast: Bool = true
     public var iCloudSyncEnabled: Bool = true
+    public var hasAcceptedMedicalDisclaimer: Bool = false
     /// Reflects whether SwiftData actually initialized with CloudKit (false if opted out or fell back to local).
     public var isCloudKitActive: Bool = false
     private var launchICloudSyncEnabled: Bool = true
@@ -46,8 +47,21 @@ public final class FastingManager {
 
     // MARK: - Post-Fast / Eating Window Tracking
     public var lastCompletedFastEndTime: Date? = nil
-    public var onRemoteFastCompleted: (@MainActor (FastRecord) -> Void)? = nil
+    /// Set when a fast is completed on the paired Apple Watch so iPhone prompts for notes/mood on next open.
+    public var pendingFeedbackRecordID: UUID? = nil
+    public var onRemoteFastCompleted: (@MainActor (FastRecord) -> Void)? = nil {
+        didSet {
+            guard let handler = onRemoteFastCompleted, !pendingRemoteCompletedRecords.isEmpty else { return }
+            let queued = pendingRemoteCompletedRecords
+            pendingRemoteCompletedRecords.removeAll()
+            for record in queued {
+                handler(record)
+            }
+        }
+    }
     private var lastStateMutationDate: Date = .distantPast
+    private var processedRemoteRecordIDs: [UUID] = []
+    private var pendingRemoteCompletedRecords: [FastRecord] = []
 
     // MARK: - Streak & Analytics Cache
     public var currentStreak: Int = 0
@@ -61,12 +75,27 @@ public final class FastingManager {
     private let keyVisualMode = "fasting_visual_mode"
     private let keyLastCompletedEndTime = "fasting_last_completed_end_time"
     private let keyLastStateMutationDate = "fasting_last_state_mutation_date"
+    private let keyPendingFeedbackRecordID = "fasting_pending_feedback_record_id"
+    private let keyProcessedRemoteRecordIDs = "fasting_processed_remote_record_ids"
     private let keyLiveActivitiesEnabled = "fasting_live_activities_enabled"
     private let keyLiveActivityCountsUp = "fasting_live_activity_counts_up"
     private let keyNotifyOneHourBefore = "fasting_notify_one_hour_before"
     private let keyNotifyTargetReached = "fasting_notify_target_reached"
     private let keyNotifyOneHourPast = "fasting_notify_one_hour_past"
     private let keyICloudSyncEnabled = "fasting_icloud_sync_enabled"
+    private let keyHasAcceptedMedicalDisclaimer = "fasting_has_accepted_medical_disclaimer"
+
+    private static var minTargetDuration: TimeInterval {
+        FastingProtocol.minFastingHours * 3600.0
+    }
+
+    private static var maxTargetDuration: TimeInterval {
+        FastingProtocol.maxFastingHours * 3600.0
+    }
+
+    private static func clampedTargetDuration(_ duration: TimeInterval) -> TimeInterval {
+        min(maxTargetDuration, max(minTargetDuration, duration))
+    }
 
     public init() {
         loadPersistedState()
@@ -82,8 +111,12 @@ public final class FastingManager {
         startTime: Date = Date()
     ) {
         let mutationDate = Date()
-        self.activeProtocol = fastingProtocol
-        self.activeTargetDuration = fastingProtocol.fastingDuration
+        let clampedDuration = Self.clampedTargetDuration(fastingProtocol.fastingDuration)
+        let safeProtocol = fastingProtocol.fastingDuration > Self.maxTargetDuration
+            ? resolvedProtocol(for: clampedDuration, current: .warrior20_4)
+            : fastingProtocol
+        self.activeProtocol = safeProtocol
+        self.activeTargetDuration = clampedDuration
         self.activeStartTime = startTime
         recordMutationDate(mutationDate)
 
@@ -102,7 +135,7 @@ public final class FastingManager {
         WatchSyncService.shared.sendStartFast(
             startTime: startTime,
             targetDuration: activeTargetDuration,
-            protocolId: fastingProtocol.id,
+            protocolId: safeProtocol.id,
             sentAt: mutationDate
         )
     }
@@ -123,14 +156,107 @@ public final class FastingManager {
             return nil
         }
 
-        // Notify paired device with exact end timestamp and record ID
+        // Notify paired device with full completed fast metadata and record ID
         WatchSyncService.shared.sendEndFast(
+            startTime: record.startTime,
             endTime: record.endTime ?? endTime,
+            targetDuration: record.targetDuration,
+            protocolId: activeProtocol.id,
+            protocolName: record.protocolName,
             recordID: record.id,
             sentAt: lastStateMutationDate
         )
 
         return record
+    }
+
+    /// Clears the pending Watch-completed fast feedback prompt once the user saves or skips it.
+    public func clearPendingFeedbackRecord() {
+        self.pendingFeedbackRecordID = nil
+        UserDefaults.standard.removeObject(forKey: keyPendingFeedbackRecordID)
+    }
+
+    /// Handles a completed fast synced from the paired device (Watch -> iPhone or iPhone -> Watch).
+    public func handleRemoteEndFast(_ payload: RemoteEndFastPayload) {
+        if let incomingID = payload.recordID, processedRemoteRecordIDs.contains(incomingID) {
+            return
+        }
+
+        let isNewerState = payload.sentAt > self.lastStateMutationDate
+        let resolvedStartTime = payload.startTime ?? (isNewerState ? self.activeStartTime : nil)
+        let resolvedTargetDuration = payload.targetDuration ?? self.activeTargetDuration
+        let resolvedProtocolName: String
+        if let name = payload.protocolName, !name.isEmpty {
+            resolvedProtocolName = name
+        } else if let protoId = payload.protocolId,
+                  let preset = FastingProtocol.allPresets.first(where: { $0.id == protoId }) {
+            resolvedProtocolName = preset.name
+        } else {
+            resolvedProtocolName = self.activeProtocol.name
+        }
+
+        let safeEndTime = resolvedStartTime.map { max($0, payload.endTime) } ?? payload.endTime
+
+        if isNewerState {
+            if self.lastCompletedFastEndTime == nil || safeEndTime > self.lastCompletedFastEndTime! {
+                self.lastCompletedFastEndTime = safeEndTime
+                UserDefaults.standard.set(safeEndTime.timeIntervalSince1970, forKey: keyLastCompletedEndTime)
+            }
+            recordMutationDate(payload.sentAt)
+            if self.activeStartTime != nil {
+                self.activeStartTime = nil
+                clearPersistedActiveState()
+                NotificationManager.shared.cancelAllFastingNotifications()
+                LiveActivityManager.shared.endLiveActivity()
+            }
+            syncComplications()
+        } else if self.lastCompletedFastEndTime == nil || safeEndTime > self.lastCompletedFastEndTime! {
+            self.lastCompletedFastEndTime = safeEndTime
+            UserDefaults.standard.set(safeEndTime.timeIntervalSince1970, forKey: keyLastCompletedEndTime)
+            syncComplications()
+        }
+
+        guard let start = resolvedStartTime else {
+            return
+        }
+
+        let recordID = payload.recordID ?? UUID()
+        let record = FastRecord(
+            id: recordID,
+            startTime: start,
+            endTime: safeEndTime,
+            targetDurationHours: resolvedTargetDuration / 3600.0,
+            protocolName: resolvedProtocolName,
+            isCompleted: true,
+            notes: nil,
+            mood: nil
+        )
+
+        recordProcessedRemoteRecordID(recordID)
+
+        #if !os(watchOS)
+        self.pendingFeedbackRecordID = recordID
+        UserDefaults.standard.set(recordID.uuidString, forKey: keyPendingFeedbackRecordID)
+        #endif
+
+        if let handler = self.onRemoteFastCompleted {
+            handler(record)
+        } else {
+            self.pendingRemoteCompletedRecords.append(record)
+        }
+    }
+
+    private func recordProcessedRemoteRecordID(_ id: UUID) {
+        if !processedRemoteRecordIDs.contains(id) {
+            processedRemoteRecordIDs.append(id)
+            if processedRemoteRecordIDs.count > 25 {
+                processedRemoteRecordIDs.removeFirst(processedRemoteRecordIDs.count - 25)
+            }
+            UserDefaults.standard.set(
+                processedRemoteRecordIDs.map(\.uuidString),
+                forKey: keyProcessedRemoteRecordIDs
+            )
+        }
     }
 
     private func completeActiveFastLocally(
@@ -186,18 +312,22 @@ public final class FastingManager {
 
     /// Selects and persists the user's preferred fasting protocol (updates complications when idle).
     public func selectProtocol(_ fastingProtocol: FastingProtocol) {
-        self.activeProtocol = fastingProtocol
-        self.activeTargetDuration = fastingProtocol.fastingDuration
+        let clampedDuration = Self.clampedTargetDuration(fastingProtocol.fastingDuration)
+        let safeProtocol = fastingProtocol.fastingDuration > Self.maxTargetDuration
+            ? resolvedProtocol(for: clampedDuration, current: .warrior20_4)
+            : fastingProtocol
+        self.activeProtocol = safeProtocol
+        self.activeTargetDuration = clampedDuration
         let defaults = UserDefaults.standard
-        defaults.set(fastingProtocol.id, forKey: keyProtocolId)
-        defaults.set(fastingProtocol.fastingDuration, forKey: keyTargetDuration)
+        defaults.set(safeProtocol.id, forKey: keyProtocolId)
+        defaults.set(clampedDuration, forKey: keyTargetDuration)
         syncComplications()
     }
 
     /// Atomically updates both start time and target duration of an ongoing fast in a single sync cycle,
     /// avoiding duplicate notifications, Live Activity IPC, complication reloads, and WatchConnectivity sends.
     public func updateOngoingFast(startTime newStartTime: Date, targetDuration newDuration: TimeInterval) {
-        let clampedDuration = max(3600.0, newDuration)
+        let clampedDuration = Self.clampedTargetDuration(newDuration)
         let resolvedProtocol = resolvedProtocol(for: clampedDuration, current: activeProtocol)
 
         if activeStartTime == nil {
@@ -251,7 +381,7 @@ public final class FastingManager {
 
     /// Changes the target duration of an ongoing or pending fast.
     public func updateTargetDuration(_ duration: TimeInterval) {
-        let clampedDuration = max(3600.0, duration)
+        let clampedDuration = Self.clampedTargetDuration(duration)
         self.activeTargetDuration = clampedDuration
         self.activeProtocol = resolvedProtocol(for: clampedDuration, current: activeProtocol)
         let defaults = UserDefaults.standard
@@ -313,6 +443,12 @@ public final class FastingManager {
     public func setICloudSyncEnabled(_ enabled: Bool) {
         self.iCloudSyncEnabled = enabled
         UserDefaults.standard.set(enabled, forKey: keyICloudSyncEnabled)
+    }
+
+    /// Records the user's acceptance of the first-launch medical disclaimer.
+    public func acceptMedicalDisclaimer() {
+        self.hasAcceptedMedicalDisclaimer = true
+        UserDefaults.standard.set(true, forKey: keyHasAcceptedMedicalDisclaimer)
     }
 
     /// Persists notification preference for 1 hour before goal and updates pending notifications.
@@ -547,6 +683,10 @@ public final class FastingManager {
         }
         self.launchICloudSyncEnabled = self.iCloudSyncEnabled
 
+        if defaults.object(forKey: keyHasAcceptedMedicalDisclaimer) != nil {
+            self.hasAcceptedMedicalDisclaimer = defaults.bool(forKey: keyHasAcceptedMedicalDisclaimer)
+        }
+
         if let lastEndTimestamp = defaults.object(forKey: keyLastCompletedEndTime) as? Double {
             self.lastCompletedFastEndTime = Date(timeIntervalSince1970: lastEndTimestamp)
         }
@@ -555,16 +695,31 @@ public final class FastingManager {
             self.lastStateMutationDate = Date(timeIntervalSince1970: lastMutationTimestamp)
         }
 
+        if let pendingIDString = defaults.string(forKey: keyPendingFeedbackRecordID),
+           let pendingID = UUID(uuidString: pendingIDString) {
+            self.pendingFeedbackRecordID = pendingID
+        }
+
+        if let processedStrings = defaults.stringArray(forKey: keyProcessedRemoteRecordIDs) {
+            self.processedRemoteRecordIDs = processedStrings.compactMap { UUID(uuidString: $0) }
+        }
+
         let savedTargetDuration = defaults.double(forKey: keyTargetDuration)
         if savedTargetDuration > 0 {
-            self.activeTargetDuration = savedTargetDuration
+            self.activeTargetDuration = Self.clampedTargetDuration(savedTargetDuration)
         }
 
         if let protocolId = defaults.string(forKey: keyProtocolId) {
-            self.activeProtocol = FastingProtocol.allPresets.first(where: { $0.id == protocolId })
-                ?? .custom(hours: self.activeTargetDuration / 3600.0)
-            if savedTargetDuration <= 0 {
-                self.activeTargetDuration = self.activeProtocol.fastingDuration
+            if let preset = FastingProtocol.allPresets.first(where: { $0.id == protocolId }) {
+                self.activeProtocol = preset
+                if savedTargetDuration <= 0 {
+                    self.activeTargetDuration = preset.fastingDuration
+                }
+            } else {
+                let clamped = Self.clampedTargetDuration(self.activeTargetDuration)
+                self.activeTargetDuration = clamped
+                self.activeProtocol = FastingProtocol.allPresets.first(where: { abs($0.fastingDuration - clamped) < 60.0 })
+                    ?? .custom(hours: clamped / 3600.0)
             }
         }
 
@@ -576,10 +731,12 @@ public final class FastingManager {
     private func setupWatchSyncListeners() {
         WatchSyncService.shared.onReceiveStartFast = { [weak self] startTime, targetDuration, protocolId, sentAt in
             guard let self = self, sentAt > self.lastStateMutationDate else { return }
+            let clampedDuration = Self.clampedTargetDuration(targetDuration)
             let proto = FastingProtocol.allPresets.first(where: { $0.id == protocolId })
-                ?? .custom(hours: targetDuration / 3600.0)
+                ?? FastingProtocol.allPresets.first(where: { abs($0.fastingDuration - clampedDuration) < 60.0 })
+                ?? .custom(hours: clampedDuration / 3600.0)
             self.activeProtocol = proto
-            self.activeTargetDuration = targetDuration
+            self.activeTargetDuration = clampedDuration
             self.activeStartTime = startTime
             self.recordMutationDate(sentAt)
             self.persistActiveState()
@@ -588,21 +745,8 @@ public final class FastingManager {
             self.syncComplications()
         }
 
-        WatchSyncService.shared.onReceiveEndFast = { [weak self] endTime, recordID, sentAt in
-            guard let self = self, sentAt > self.lastStateMutationDate else { return }
-            if let record = self.completeActiveFastLocally(
-                endTime: endTime,
-                recordID: recordID ?? UUID(),
-                mutationDate: sentAt
-            ) {
-                self.onRemoteFastCompleted?(record)
-            } else {
-                // Even if this device didn't have the fast active locally, record the latest end time & mutation
-                self.lastCompletedFastEndTime = endTime
-                UserDefaults.standard.set(endTime.timeIntervalSince1970, forKey: self.keyLastCompletedEndTime)
-                self.recordMutationDate(sentAt)
-                self.syncComplications()
-            }
+        WatchSyncService.shared.onReceiveEndFast = { [weak self] payload in
+            self?.handleRemoteEndFast(payload)
         }
 
         WatchSyncService.shared.onReceiveCancelFast = { [weak self] sentAt in

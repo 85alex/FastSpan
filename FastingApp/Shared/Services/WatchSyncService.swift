@@ -3,13 +3,42 @@ import Foundation
 @preconcurrency import WatchConnectivity
 #endif
 
+/// Payload describing a fast ended on the paired device.
+public struct RemoteEndFastPayload: Sendable {
+    public let startTime: Date?
+    public let endTime: Date
+    public let targetDuration: TimeInterval?
+    public let protocolId: String?
+    public let protocolName: String?
+    public let recordID: UUID?
+    public let sentAt: Date
+
+    public init(
+        startTime: Date? = nil,
+        endTime: Date,
+        targetDuration: TimeInterval? = nil,
+        protocolId: String? = nil,
+        protocolName: String? = nil,
+        recordID: UUID? = nil,
+        sentAt: Date
+    ) {
+        self.startTime = startTime
+        self.endTime = endTime
+        self.targetDuration = targetDuration
+        self.protocolId = protocolId
+        self.protocolName = protocolName
+        self.recordID = recordID
+        self.sentAt = sentAt
+    }
+}
+
 /// Coordinates real-time state synchronization between iOS and watchOS via WatchConnectivity.
 @MainActor
 public final class WatchSyncService {
     public static let shared = WatchSyncService()
 
     public var onReceiveStartFast: (@MainActor (Date, TimeInterval, String, Date) -> Void)?
-    public var onReceiveEndFast: (@MainActor (Date, UUID?, Date) -> Void)?
+    public var onReceiveEndFast: (@MainActor (RemoteEndFastPayload) -> Void)?
     public var onReceiveCancelFast: (@MainActor (Date) -> Void)?
     public var onReceiveTimerPreference: (@MainActor (Bool) -> Void)?
     public var onReceiveRequestState: (@MainActor () -> [String: Any])?
@@ -19,6 +48,7 @@ public final class WatchSyncService {
         let payload: [String: Any]
         let isComplicationPriority: Bool
         let useApplicationContext: Bool
+        let guaranteeQueuedDelivery: Bool
     }
 
     private let delegateBridge: WatchSessionDelegateBridge
@@ -47,7 +77,8 @@ public final class WatchSyncService {
                     self.sendPayload(
                         pendingFast.payload,
                         isComplicationPriority: pendingFast.isComplicationPriority,
-                        useApplicationContext: pendingFast.useApplicationContext
+                        useApplicationContext: pendingFast.useApplicationContext,
+                        guaranteeQueuedDelivery: pendingFast.guaranteeQueuedDelivery
                     )
                 }
                 if let pendingPref = self.pendingPreferencePayload {
@@ -55,7 +86,8 @@ public final class WatchSyncService {
                     self.sendPayload(
                         pendingPref.payload,
                         isComplicationPriority: pendingPref.isComplicationPriority,
-                        useApplicationContext: pendingPref.useApplicationContext
+                        useApplicationContext: pendingPref.useApplicationContext,
+                        guaranteeQueuedDelivery: pendingPref.guaranteeQueuedDelivery
                     )
                 }
                 if !context.isEmpty {
@@ -67,6 +99,22 @@ public final class WatchSyncService {
         if WCSession.isSupported() {
             let session = WCSession.default
             session.delegate = bridge
+            session.activate()
+        }
+        #endif
+    }
+
+    /// Re-checks the latest received application context (safe to call on foreground; handlers deduplicate by ID & timestamp).
+    public func syncPendingReceivedContext() {
+        #if (os(iOS) || os(watchOS)) && canImport(WatchConnectivity)
+        guard WCSession.isSupported() else { return }
+        let session = WCSession.default
+        if session.activationState == .activated {
+            let context = session.receivedApplicationContext
+            if !context.isEmpty {
+                handleIncomingPayload(context)
+            }
+        } else {
             session.activate()
         }
         #endif
@@ -85,9 +133,22 @@ public final class WatchSyncService {
                 self.onReceiveStartFast?(start, targetDuration, protocolId, sentAt)
             }
         case "endFast":
+            let startTime = (incoming["startTime"] as? Double).map { Date(timeIntervalSince1970: $0) }
             let endTime = (incoming["endTime"] as? Double).map { Date(timeIntervalSince1970: $0) } ?? sentAt
+            let targetDuration = incoming["targetDuration"] as? Double
+            let protocolId = incoming["protocolId"] as? String
+            let protocolName = incoming["protocolName"] as? String
             let recordID = (incoming["recordId"] as? String).flatMap { UUID(uuidString: $0) }
-            self.onReceiveEndFast?(endTime, recordID, sentAt)
+            let payload = RemoteEndFastPayload(
+                startTime: startTime,
+                endTime: endTime,
+                targetDuration: targetDuration,
+                protocolId: protocolId,
+                protocolName: protocolName,
+                recordID: recordID,
+                sentAt: sentAt
+            )
+            self.onReceiveEndFast?(payload)
         case "cancelFast":
             self.onReceiveCancelFast?(sentAt)
         case "timerPreference":
@@ -116,9 +177,13 @@ public final class WatchSyncService {
         sendPayload(payload, isComplicationPriority: true)
     }
 
-    /// Broadcasts active fast end (with exact end timestamp and record ID) to paired device
+    /// Broadcasts active fast end (with full completed fast metadata and record ID) to paired device
     public func sendEndFast(
+        startTime: Date? = nil,
         endTime: Date = Date(),
+        targetDuration: TimeInterval? = nil,
+        protocolId: String? = nil,
+        protocolName: String? = nil,
         recordID: UUID? = nil,
         sentAt: Date = Date()
     ) {
@@ -127,10 +192,27 @@ public final class WatchSyncService {
             "endTime": endTime.timeIntervalSince1970,
             "sentAt": sentAt.timeIntervalSince1970
         ]
+        if let startTime {
+            payload["startTime"] = startTime.timeIntervalSince1970
+        }
+        if let targetDuration {
+            payload["targetDuration"] = targetDuration
+        }
+        if let protocolId {
+            payload["protocolId"] = protocolId
+        }
+        if let protocolName {
+            payload["protocolName"] = protocolName
+        }
         if let recordID {
             payload["recordId"] = recordID.uuidString
         }
-        sendPayload(payload, isComplicationPriority: true)
+        sendPayload(
+            payload,
+            isComplicationPriority: true,
+            useApplicationContext: true,
+            guaranteeQueuedDelivery: true
+        )
     }
 
     /// Broadcasts active fast cancellation to paired device
@@ -171,7 +253,8 @@ public final class WatchSyncService {
     private func sendPayload(
         _ payload: [String: Any],
         isComplicationPriority: Bool = false,
-        useApplicationContext: Bool = true
+        useApplicationContext: Bool = true,
+        guaranteeQueuedDelivery: Bool = false
     ) {
         #if (os(iOS) || os(watchOS)) && canImport(WatchConnectivity)
         guard WCSession.isSupported() else { return }
@@ -180,7 +263,8 @@ public final class WatchSyncService {
             let pending = PendingPayload(
                 payload: payload,
                 isComplicationPriority: isComplicationPriority,
-                useApplicationContext: useApplicationContext
+                useApplicationContext: useApplicationContext,
+                guaranteeQueuedDelivery: guaranteeQueuedDelivery
             )
             if useApplicationContext {
                 pendingFastStatePayload = pending
@@ -200,31 +284,40 @@ public final class WatchSyncService {
             }
         }
 
+        #if os(watchOS)
+        if guaranteeQueuedDelivery {
+            // Hand off synchronously to the system daemon so wrist-down suspension or subsequent
+            // fast starts can never drop or overwrite a completed fast record.
+            session.transferUserInfo(safePayload)
+        }
+        #endif
+
         if session.isReachable {
-            // Counterpart is awake and reachable: send directly without burning complication transfer budget
+            // Counterpart is awake and reachable: send directly for immediate delivery
             session.sendMessage(safePayload, replyHandler: nil) { error in
                 print("[WatchSyncService] Message send error: \(error.localizedDescription)")
                 // Fall back to queued delivery if direct message failed
-                if !useApplicationContext {
+                #if os(watchOS)
+                if !guaranteeQueuedDelivery {
                     session.transferUserInfo(safePayload)
-                } else {
-                    #if os(iOS)
-                    if isComplicationPriority,
-                       session.isPaired,
-                       session.isWatchAppInstalled,
-                       session.isComplicationEnabled,
-                       session.remainingComplicationUserInfoTransfers > 0 {
-                        session.transferCurrentComplicationUserInfo(safePayload)
-                    }
-                    #endif
                 }
+                #else
+                if !useApplicationContext || guaranteeQueuedDelivery {
+                    session.transferUserInfo(safePayload)
+                } else if isComplicationPriority,
+                          session.isPaired,
+                          session.isWatchAppInstalled,
+                          session.isComplicationEnabled,
+                          session.remainingComplicationUserInfoTransfers > 0 {
+                    session.transferCurrentComplicationUserInfo(safePayload)
+                }
+                #endif
             }
         } else if !useApplicationContext {
             // Queue non-lifecycle preferences without clobbering applicationContext
             session.transferUserInfo(safePayload)
         } else {
-            // Counterpart is not currently reachable: on iOS, use high-priority complication transfer
-            // ONLY for fast start/end/cancel (2-4x/day) so watch face updates promptly.
+            // Counterpart is not currently reachable
             #if os(iOS)
             if isComplicationPriority,
                session.isPaired,
@@ -232,6 +325,8 @@ public final class WatchSyncService {
                session.isComplicationEnabled,
                session.remainingComplicationUserInfoTransfers > 0 {
                 session.transferCurrentComplicationUserInfo(safePayload)
+            } else if guaranteeQueuedDelivery {
+                session.transferUserInfo(safePayload)
             }
             #endif
         }

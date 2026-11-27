@@ -16,9 +16,9 @@ public struct WatchProtocolPicker: View {
                 } label: {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(proto.name)
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
                             Text(proto.formattedRatio)
+                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                            Text(proto.subtitle)
                                 .font(.system(size: 11))
                                 .foregroundStyle(.secondary)
                         }

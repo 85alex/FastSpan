@@ -20,9 +20,8 @@ struct FastSpanApp: App {
         self.modelContainer = container
         FastingManager.shared.isCloudKitActive = isCloudKitActive
         FastingManager.shared.onRemoteFastCompleted = { record in
-            // When CloudKit actually activated, it syncs the Watch's SwiftData record automatically.
-            // If CloudKit is opted out OR fell back to local storage, persist the Watch record directly.
-            guard !FastingManager.shared.isCloudKitActive else { return }
+            // Always persist completed fasts synced via WatchConnectivity immediately (deduplicated by ID)
+            // so the record is available in History and ready for post-fast notes/mood right away.
             let recordID = record.id
             let descriptor = FetchDescriptor<FastRecord>(predicate: #Predicate { $0.id == recordID })
             let existingCount = (try? container.mainContext.fetchCount(descriptor)) ?? 0
@@ -41,7 +40,8 @@ struct FastSpanApp: App {
         WindowGroup {
             MainTrackerView()
                 .preferredColorScheme(.dark)
-                .task {
+                .task(id: fastingManager.hasAcceptedMedicalDisclaimer) {
+                    guard fastingManager.hasAcceptedMedicalDisclaimer else { return }
                     let authorized = await NotificationManager.shared.requestAuthorization()
                     fastingManager.syncNotifications(force: authorized)
                     fastingManager.syncLiveActivity()
@@ -53,6 +53,7 @@ struct FastSpanApp: App {
                     case .active:
                         if didEnterBackground {
                             didEnterBackground = false
+                            WatchSyncService.shared.syncPendingReceivedContext()
                             fastingManager.syncNotifications()
                             fastingManager.syncLiveActivity()
                         }

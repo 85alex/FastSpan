@@ -28,11 +28,14 @@ struct TestMain {
         assertTest("16:8 Fasting Duration is 16 hours", standard16.fastingHours == 16.0 && standard16.fastingDuration == 57600.0)
         assertTest("16:8 Eating window is 8 hours", standard16.eatingHours == 8.0)
         assertTest("16:8 Formatted ratio is '16:8'", standard16.formattedRatio == "16:8")
+        assertTest("16:8 Name is ratio-only '16:8'", standard16.name == "16:8")
 
         let custom17_5 = FastingProtocol.custom(hours: 17.5)
         assertTest("Custom 17.5h Protocol computes correct ratio", custom17_5.formattedRatio == "17h 30m" && custom17_5.isCustom)
-        assertTest("13:11 Circadian fast is 13 hours", FastingProtocol.circadian13_11.fastingHours == 13.0)
-        assertTest("All presets count is 8", FastingProtocol.allPresets.count == 8)
+        let customOverCap = FastingProtocol.custom(hours: 36.0)
+        assertTest("Custom duration clamps at 20h maximum", customOverCap.fastingHours == 20.0 && customOverCap.formattedRatio == "20h")
+        assertTest("13:11 fast is 13 hours", FastingProtocol.circadian13_11.fastingHours == 13.0)
+        assertTest("All presets count is 6 (max 20h)", FastingProtocol.allPresets.count == 6 && FastingProtocol.allPresets.allSatisfy { $0.fastingHours <= 20.0 && $0.name == $0.formattedRatio })
 
         // --- 2. Live Fasting Snapshot & Overtime Math ---
         print("\n▶️ [2/6] Testing Timer Engine & Snapshot Math...")
@@ -98,6 +101,7 @@ struct TestMain {
 
         // --- 5. Pro StoreKit Gating & CSV Export ---
         print("\n▶️ [5/6] Testing Pro Feature Gating & CSV Export...")
+        assertTest("StoreManager has no hardcoded fallback price", StoreManager().localizedPrice == nil)
         assertTest("Pro features count is 4", ProFeature.allCases.count == 4)
         assertTest("Slate Minimal is Free", AppTheme.slateMinimal.isPro == false)
         assertTest("Solar Amber is Free", AppTheme.solarAmber.isPro == false)
@@ -123,7 +127,7 @@ struct TestMain {
             startTime: Date(timeIntervalSince1970: 1700000000),
             endTime: Date(timeIntervalSince1970: 1700057600),
             targetDurationHours: 16.0,
-            protocolName: "16:8 LeanGains",
+            protocolName: "16:8",
             isCompleted: true,
             notes: "Note with, comma and \"quotes\"",
             mood: "⚡ Energized"
@@ -214,7 +218,9 @@ struct TestMain {
             "fasting_active_target_duration",
             "fasting_active_protocol_id",
             "fasting_last_completed_end_time",
-            "fasting_last_state_mutation_date"
+            "fasting_last_state_mutation_date",
+            "fasting_pending_feedback_record_id",
+            "fasting_processed_remote_record_ids"
         ]
         var backedUpValues: [String: Any] = [:]
         for key in backupKeys {
@@ -265,6 +271,118 @@ struct TestMain {
         assertTest("Eating window HM formatter omits seconds", snapIdle.formattedTimeSinceLastFastHM == "03:30")
         let goalAtmosphere = AtmosphericPalette.forProgress(1.0, phase: .targetReached)
         assertTest("targetReached phase produces GOAL REACHED atmosphere", goalAtmosphere.phaseLabel == "GOAL REACHED")
+
+        // --- 10. Watch -> iPhone End-Fast Sync & Pending Feedback Prompt ---
+        print("\n▶️ [10/10] Testing Watch -> iPhone End-Fast Sync & Pending Feedback...")
+        for key in backupKeys {
+            defaults.removeObject(forKey: key)
+        }
+
+        // 10a. Fast started & ended entirely on Watch while iPhone was idle/offline
+        let watchSyncManager = FastingManager()
+        var receivedWatchRecords: [FastRecord] = []
+        watchSyncManager.onRemoteFastCompleted = { record in
+            receivedWatchRecords.append(record)
+        }
+        let watchRecordID = UUID()
+        let watchStart = Date().addingTimeInterval(-17 * 3600)
+        let watchEnd = Date().addingTimeInterval(-60)
+        let watchEndPayload = RemoteEndFastPayload(
+            startTime: watchStart,
+            endTime: watchEnd,
+            targetDuration: 16 * 3600,
+            protocolId: FastingProtocol.standard16_8.id,
+            protocolName: FastingProtocol.standard16_8.name,
+            recordID: watchRecordID,
+            sentAt: watchEnd
+        )
+        watchSyncManager.handleRemoteEndFast(watchEndPayload)
+        assertTest("Offline Watch fast emits FastRecord even when iPhone was idle", receivedWatchRecords.count == 1)
+        assertTest("Synced Watch record preserves exact ID & timestamps", receivedWatchRecords.first?.id == watchRecordID && receivedWatchRecords.first?.startTime == watchStart && receivedWatchRecords.first?.endTime == watchEnd)
+        assertTest("Synced Watch record sets pendingFeedbackRecordID for next iPhone open", watchSyncManager.pendingFeedbackRecordID == watchRecordID)
+        assertTest("Synced Watch record updates lastCompletedFastEndTime", watchSyncManager.lastCompletedFastEndTime == watchEnd)
+
+        // 10b. Duplicate delivery (e.g. sendMessage + transferUserInfo + applicationContext) is ignored
+        watchSyncManager.handleRemoteEndFast(watchEndPayload)
+        assertTest("Duplicate Watch endFast delivery is deduplicated", receivedWatchRecords.count == 1)
+
+        // 10c. Clearing pending feedback persists across app relaunch and old applicationContext replay doesn't re-prompt
+        watchSyncManager.clearPendingFeedbackRecord()
+        assertTest("clearPendingFeedbackRecord clears pending ID", watchSyncManager.pendingFeedbackRecordID == nil)
+        let relaunchedPhoneManager = FastingManager()
+        var relaunchRecords: [FastRecord] = []
+        relaunchedPhoneManager.onRemoteFastCompleted = { record in
+            relaunchRecords.append(record)
+        }
+        relaunchedPhoneManager.handleRemoteEndFast(watchEndPayload)
+        assertTest("Replaying already-processed Watch endFast after relaunch does not duplicate", relaunchRecords.isEmpty)
+        assertTest("Replaying already-processed Watch endFast after relaunch does not re-prompt feedback", relaunchedPhoneManager.pendingFeedbackRecordID == nil)
+
+        // 10d. Out-of-order multi-fast Watch queue: Fast #2 started (T2) arrives before Fast #1 ended (T1)
+        let fast2Start = Date()
+        relaunchedPhoneManager.startFast(protocol: .moderate18_6, startTime: fast2Start)
+        let fast1RecordID = UUID()
+        let fast1End = fast2Start.addingTimeInterval(-3600)
+        let fast1Start = fast1End.addingTimeInterval(-16 * 3600)
+        relaunchedPhoneManager.handleRemoteEndFast(
+            RemoteEndFastPayload(
+                startTime: fast1Start,
+                endTime: fast1End,
+                targetDuration: 16 * 3600,
+                protocolId: FastingProtocol.standard16_8.id,
+                protocolName: FastingProtocol.standard16_8.name,
+                recordID: fast1RecordID,
+                sentAt: fast1End
+            )
+        )
+        assertTest("Older Watch endFast does not cancel newer active fast", relaunchedPhoneManager.activeStartTime == fast2Start)
+        assertTest("Older Watch endFast still saves historical FastRecord", relaunchRecords.count == 1 && relaunchRecords.first?.id == fast1RecordID)
+
+        // 10e. Buffering when remote fast arrives before onRemoteFastCompleted handler is attached
+        let bufferingManager = FastingManager()
+        let bufferedID = UUID()
+        let bufferedEnd = Date().addingTimeInterval(10)
+        bufferingManager.handleRemoteEndFast(
+            RemoteEndFastPayload(
+                startTime: bufferedEnd.addingTimeInterval(-16 * 3600),
+                endTime: bufferedEnd,
+                targetDuration: 16 * 3600,
+                protocolId: FastingProtocol.standard16_8.id,
+                protocolName: FastingProtocol.standard16_8.name,
+                recordID: bufferedID,
+                sentAt: bufferedEnd
+            )
+        )
+        var flushedRecords: [FastRecord] = []
+        bufferingManager.onRemoteFastCompleted = { record in
+            flushedRecords.append(record)
+        }
+        assertTest("Buffered remote fast flushes when onRemoteFastCompleted is attached", flushedRecords.count == 1 && flushedRecords.first?.id == bufferedID)
+
+        // --- 11. Medical Disclaimer Acceptance & 20h Cap Persistence ---
+        print("\n▶️ [11/11] Testing Medical Disclaimer Persistence & 20h Duration Clamping...")
+        let disclaimerKey = "fasting_has_accepted_medical_disclaimer"
+        let savedDisclaimerPref = defaults.object(forKey: disclaimerKey)
+        defaults.removeObject(forKey: disclaimerKey)
+        let freshDisclaimerManager = FastingManager()
+        assertTest("Medical disclaimer starts unaccepted on first launch", freshDisclaimerManager.hasAcceptedMedicalDisclaimer == false)
+        freshDisclaimerManager.acceptMedicalDisclaimer()
+        assertTest("acceptMedicalDisclaimer marks disclaimer accepted", freshDisclaimerManager.hasAcceptedMedicalDisclaimer == true)
+        let reloadedDisclaimerManager = FastingManager()
+        assertTest("Medical disclaimer acceptance persists across relaunches", reloadedDisclaimerManager.hasAcceptedMedicalDisclaimer == true)
+        if let saved = savedDisclaimerPref {
+            defaults.set(saved, forKey: disclaimerKey)
+        } else {
+            defaults.removeObject(forKey: disclaimerKey)
+        }
+
+        // Legacy >20h persisted duration migrates down to <=20h on reload
+        defaults.set(36.0 * 3600.0, forKey: "fasting_active_target_duration")
+        defaults.set("36h", forKey: "fasting_active_protocol_id")
+        let migratedManager = FastingManager()
+        assertTest("Legacy 36h persisted target clamps to 20h on reload", migratedManager.activeTargetDuration == 20.0 * 3600.0 && migratedManager.activeProtocol.id == FastingProtocol.warrior20_4.id)
+        migratedManager.updateTargetDuration(48.0 * 3600.0)
+        assertTest("updateTargetDuration clamps durations above 20h", migratedManager.activeTargetDuration == 20.0 * 3600.0)
 
         // Restore UserDefaults
         for key in backupKeys {

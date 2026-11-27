@@ -25,6 +25,7 @@ public struct MainTrackerView: View {
     @State private var showPaywall: Bool = false
     @State private var showCancelConfirmation: Bool = false
     @State private var justCompletedRecord: FastRecord? = nil
+    @State private var remoteCompletedRecordForFeedback: FastRecord? = nil
 
     // Interactive Drag-to-Preview Scrubbing State
     @State private var scrubFraction: Double? = nil
@@ -32,7 +33,15 @@ public struct MainTrackerView: View {
     public init() {}
 
     private var isModalCoveringTracker: Bool {
-        showProtocolPicker || showEditSheet || showCompleteSheet || showHistorySheet || showSettingsSheet || showPaywall || justCompletedRecord != nil
+        !fastingManager.hasAcceptedMedicalDisclaimer
+            || showProtocolPicker
+            || showEditSheet
+            || showCompleteSheet
+            || showHistorySheet
+            || showSettingsSheet
+            || showPaywall
+            || justCompletedRecord != nil
+            || remoteCompletedRecordForFeedback != nil
     }
 
     private var isTimelinePaused: Bool {
@@ -86,6 +95,27 @@ public struct MainTrackerView: View {
                     }
                 )
             }
+            .sheet(item: $remoteCompletedRecordForFeedback, onDismiss: {
+                fastingManager.clearPendingFeedbackRecord()
+            }) { record in
+                FastDetailSheet(
+                    mode: .completeRemoteFast(
+                        protocolName: record.protocolName,
+                        formattedDuration: record.formattedDuration,
+                        isGoalAchieved: record.isGoalAchieved
+                    ),
+                    onConfirmComplete: { notes, mood in
+                        record.notes = notes
+                        record.mood = mood
+                        #if canImport(SwiftData)
+                        try? modelContext.save()
+                        #endif
+                        fastingManager.clearPendingFeedbackRecord()
+                        fastingManager.updateStreaks(from: allRecords)
+                        self.justCompletedRecord = record
+                    }
+                )
+            }
             .sheet(item: $justCompletedRecord) { record in
                 ShareSheetModal(
                     record: record,
@@ -118,12 +148,32 @@ public struct MainTrackerView: View {
             .onAppear {
                 fastingManager.updateStreaks(from: allRecords)
                 consumePendingEndFastIfNeeded()
+                presentPendingWatchFeedbackIfNeeded()
             }
             .onChange(of: allRecords.count) { _, _ in
                 fastingManager.updateStreaks(from: allRecords)
+                presentPendingWatchFeedbackIfNeeded()
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                if newPhase == .active {
+                    presentPendingWatchFeedbackIfNeeded()
+                }
+            }
+            .onChange(of: fastingManager.pendingFeedbackRecordID) { _, _ in
+                presentPendingWatchFeedbackIfNeeded()
             }
             .onReceive(NotificationCenter.default.publisher(for: .fastSpanRequestEndFast)) { _ in
                 consumePendingEndFastIfNeeded()
+            }
+        }
+        .overlay {
+            if !fastingManager.hasAcceptedMedicalDisclaimer {
+                FirstLaunchDisclaimerModal {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        fastingManager.acceptMedicalDisclaimer()
+                    }
+                }
+                .transition(.opacity)
             }
         }
     }
@@ -139,14 +189,12 @@ public struct MainTrackerView: View {
         let atmosphere = AtmosphericPalette.forProgress(effectiveProgress, phase: effectivePhase)
 
         ZStack {
-            // Dynamic Sunset-to-Sunrise Diurnal Background:
-            // Bright Yellow (Morning) -> Sunset Red -> Midnight Purple (Middle of night) -> Dawn Red/Orange -> Bright Yellow (End)
-            LinearGradient(
-                colors: [atmosphere.topColor, atmosphere.bottomColor],
-                startPoint: .top,
-                endPoint: .bottom
+            // Dynamic Sunset-to-Sunrise Diurnal Background with Setting/Rising Sun, Night Stars & Shooting Stars
+            CelestialSkyBackgroundView(
+                progress: effectiveProgress,
+                phase: effectivePhase,
+                isScrubbing: scrubFraction != nil
             )
-            .ignoresSafeArea()
 
             VStack(spacing: 14) {
                 // Top Header Bar
@@ -180,6 +228,16 @@ public struct MainTrackerView: View {
            fastingManager.activeStartTime != nil {
             showCompleteSheet = true
         }
+    }
+
+    private func presentPendingWatchFeedbackIfNeeded() {
+        guard scenePhase == .active,
+              !isModalCoveringTracker,
+              let pendingID = fastingManager.pendingFeedbackRecordID,
+              let record = allRecords.first(where: { $0.id == pendingID }) else {
+            return
+        }
+        remoteCompletedRecordForFeedback = record
     }
 
     private func headerBar(atmosphere: AtmosphericPalette) -> some View {
@@ -293,6 +351,7 @@ public struct MainTrackerView: View {
                 phase: snapshot.phase,
                 lineWidth: 5,
                 showLabels: true,
+                showLocalStars: false,
                 startTimeLabel: startTimeStr,
                 endTimeLabel: endTimeStr,
                 isInteractive: true,

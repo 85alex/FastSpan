@@ -246,6 +246,7 @@ public struct ValleyProgressView: View {
     public let phase: FastingPhase
     public let lineWidth: CGFloat
     public let showLabels: Bool
+    public let showLocalStars: Bool
     public let startTimeLabel: String?
     public let endTimeLabel: String?
     public let isInteractive: Bool
@@ -282,6 +283,7 @@ public struct ValleyProgressView: View {
         phase: FastingPhase,
         lineWidth: CGFloat = 5,
         showLabels: Bool = true,
+        showLocalStars: Bool = true,
         startTimeLabel: String? = nil,
         endTimeLabel: String? = nil,
         isInteractive: Bool = false,
@@ -293,6 +295,7 @@ public struct ValleyProgressView: View {
         self.phase = phase
         self.lineWidth = lineWidth
         self.showLabels = showLabels
+        self.showLocalStars = showLocalStars
         self.startTimeLabel = startTimeLabel
         self.endTimeLabel = endTimeLabel
         self.isInteractive = isInteractive
@@ -306,6 +309,7 @@ public struct ValleyProgressView: View {
         phase: FastingPhase,
         lineWidth: CGFloat = 5,
         showLabels: Bool = true,
+        showLocalStars: Bool = true,
         startTimeLabel: String? = nil,
         endTimeLabel: String? = nil,
         isInteractive: Bool = false,
@@ -316,6 +320,7 @@ public struct ValleyProgressView: View {
         self.phase = phase
         self.lineWidth = lineWidth
         self.showLabels = showLabels
+        self.showLocalStars = showLocalStars
         self.startTimeLabel = startTimeLabel
         self.endTimeLabel = endTimeLabel
         self.isInteractive = isInteractive
@@ -343,12 +348,14 @@ public struct ValleyProgressView: View {
 
             ZStack {
                 // Midnight Star Field (Small white dots illuminating the night sky around the dip)
-                ForEach(0..<Self.midnightStars.count, id: \.self) { idx in
-                    let star = Self.midnightStars[idx]
-                    Circle()
-                        .fill(Color.white.opacity(star.3 * (atmosphere.isLightBackground ? 0.35 : 0.85)))
-                        .frame(width: star.2, height: star.2)
-                        .position(x: w * star.0, y: h * star.1)
+                if showLocalStars {
+                    ForEach(0..<Self.midnightStars.count, id: \.self) { idx in
+                        let star = Self.midnightStars[idx]
+                        Circle()
+                            .fill(Color.white.opacity(star.3 * (atmosphere.isLightBackground ? 0.35 : 0.85)))
+                            .frame(width: star.2, height: star.2)
+                            .position(x: w * star.0, y: h * star.1)
+                    }
                 }
 
                 // Background Track Path (GPU-backed continuous curve)

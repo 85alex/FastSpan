@@ -4,7 +4,7 @@ import SwiftUI
 import StoreKit
 #endif
 
-/// Manages StoreKit 2 lifetime non-consumable Pro purchase ($5 CAD) and entitlement checks.
+/// Manages StoreKit 2 lifetime non-consumable Pro purchase and entitlement checks.
 @MainActor
 @Observable
 public final class StoreManager {
@@ -15,7 +15,8 @@ public final class StoreManager {
     public var isProUnlocked: Bool = false
     public var isPurchasing: Bool = false
     public var errorMessage: String? = nil
-    public var localizedPrice: String = "$4.99 CAD"
+    /// Dynamically populated from StoreKit's `Product.displayPrice` (never hardcoded).
+    public var localizedPrice: String? = nil
 
     #if (os(iOS) || os(watchOS)) && canImport(StoreKit)
     public var proProduct: Product? = nil

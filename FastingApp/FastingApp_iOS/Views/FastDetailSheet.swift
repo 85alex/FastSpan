@@ -1,9 +1,10 @@
 import SwiftUI
 
-public enum FastDetailMode {
+public enum FastDetailMode: Equatable {
     case startRetroactive
     case editOngoing
     case completeFast
+    case completeRemoteFast(protocolName: String, formattedDuration: String, isGoalAchieved: Bool)
 }
 
 /// Sheet for editing ongoing fast properties or adding notes and mood upon completion.
@@ -38,7 +39,11 @@ public struct FastDetailSheet: View {
         self.onSaveEdit = onSaveEdit
         self.onConfirmComplete = onConfirmComplete
         _startTime = State(initialValue: initialStartTime)
-        _targetHours = State(initialValue: initialTargetHours)
+        let clampedHours = min(
+            FastingProtocol.maxFastingHours,
+            max(FastingProtocol.minFastingHours, initialTargetHours)
+        )
+        _targetHours = State(initialValue: clampedHours)
     }
 
     public var body: some View {
@@ -59,7 +64,7 @@ public struct FastDetailSheet: View {
 
                             Stepper(
                                 value: $targetHours,
-                                in: 1.0...72.0,
+                                in: FastingProtocol.minFastingHours...FastingProtocol.maxFastingHours,
                                 step: 0.5
                             ) {
                                 HStack {
@@ -72,6 +77,41 @@ public struct FastDetailSheet: View {
                             }
                         }
                     } else {
+                        if case let .completeRemoteFast(protocolName, formattedDuration, isGoalAchieved) = mode {
+                            Section {
+                                HStack(spacing: 12) {
+                                    Image(systemName: "applewatch")
+                                        .font(.system(size: 20, weight: .semibold))
+                                        .foregroundStyle(Color.orange)
+                                        .frame(width: 36, height: 36)
+                                        .background(Color.orange.opacity(0.15))
+                                        .clipShape(Circle())
+
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Completed on Apple Watch")
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                            .foregroundStyle(Color.white)
+                                        Text("\(formattedDuration) • \(protocolName)")
+                                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                                            .foregroundStyle(Color.white.opacity(0.7))
+                                    }
+
+                                    Spacer()
+
+                                    if isGoalAchieved {
+                                        Text("GOAL MET")
+                                            .font(.system(size: 10, weight: .black, design: .rounded))
+                                            .foregroundStyle(Color.black)
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 4)
+                                            .background(Color.orange)
+                                            .clipShape(Capsule())
+                                    }
+                                }
+                                .padding(.vertical, 2)
+                            }
+                        }
+
                         Section("How do you feel?") {
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                                 ForEach(moods, id: \.self) { mood in
@@ -103,13 +143,11 @@ public struct FastDetailSheet: View {
                 }
                 .scrollContentBackground(.hidden)
             }
-            .navigationTitle(
-                mode == .startRetroactive ? "Start Earlier" : (mode == .editOngoing ? "Edit Fast" : "Complete Fast")
-            )
+            .navigationTitle(navigationTitleText)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(isRemoteCompletion ? "Skip" : "Cancel") { dismiss() }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
@@ -127,6 +165,24 @@ public struct FastDetailSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents(isRemoteCompletion ? [.medium, .large] : [.medium])
+    }
+
+    private var isRemoteCompletion: Bool {
+        if case .completeRemoteFast = mode { return true }
+        return false
+    }
+
+    private var navigationTitleText: String {
+        switch mode {
+        case .startRetroactive:
+            return "Start Earlier"
+        case .editOngoing:
+            return "Edit Fast"
+        case .completeFast:
+            return "Complete Fast"
+        case .completeRemoteFast:
+            return "Fast Completed"
+        }
     }
 }
